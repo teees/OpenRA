@@ -36,7 +36,7 @@ namespace OpenRA.Mods.Common.Traits
 		public readonly string[] BuildSounds = { "placbldg.aud", "build5.aud" };
 		public readonly string[] UndeploySounds = { "cashturn.aud" };
 
-		public object Create(ActorInitializer init) { return new Building(init, this); }
+		public virtual object Create(ActorInitializer init) { return new Building(init, this); }
 
 		public Actor FindBaseProvider(World world, Player p, CPos topLeft)
 		{

@@ -251,6 +251,10 @@ namespace OpenRA.Mods.Common.Traits
 					return true;
 			}
 
+			var gate = otherActor.TraitOrDefault<IGate>();
+			if (gate != null && (gate.IsOpen() || gate.CanOpen(self)))
+				return false;
+
 			// If there are no crushable traits at all, this means the other actor cannot be crushed - we are blocked.
 			if (lacksCrushability)
 				return true;
@@ -569,6 +573,15 @@ namespace OpenRA.Mods.Common.Traits
 		public bool CanEnterCell(CPos cell, Actor ignoreActor = null, bool checkTransientActors = true)
 		{
 			return Info.CanEnterCell(self.World, self, cell, ignoreActor, checkTransientActors ? CellConditions.All : CellConditions.BlockedByMovers);
+		}
+
+		public bool ContainsClosedGate(CPos cell)
+		{
+			var gate = self.World.ActorMap.GetActorsAt(cell).Where(a => a != self).FirstOrDefault();
+			if (gate == null)
+				return false;
+			var gateTrait = gate.TraitOrDefault<IGate>();
+			return gateTrait != null && !gateTrait.IsOpen();
 		}
 
 		public bool CanMoveFreelyInto(CPos cell, Actor ignoreActor = null, bool checkTransientActors = true)
