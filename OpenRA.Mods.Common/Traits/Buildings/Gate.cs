@@ -17,117 +17,136 @@ using OpenRA.Traits;
 namespace OpenRA.Mods.Common.Traits
 {
 	[Desc("Will open and be passable for actors that appear friendly when there are no enemies in range.")]
-	public class GateInfo : UpgradableTraitInfo, ITraitInfo, Requires<RenderSimpleInfo>
+	public class GateInfo : BuildingInfo, ITraitInfo, Requires<WithSpriteBodyInfo>
 	{
 		public readonly string OpenSequence = "open";
 		public readonly string ClosingSequence = "closing";
 		public readonly string ClosedSequence = "closed";
 
-		public readonly string OpeningSound = null;
-		public readonly string ClosingSound = null;
+		public readonly string OpeningSound = "gateup1.aud";
+		public readonly string ClosingSound = "gatedwn1.aud";
 
-		[Desc("`-` means it blocks when closed.")]
-		public readonly string Footprint = "-";
-		public readonly CVec Dimensions = new CVec(1, 1);
+		[Desc("How many ticks until the gate will close after being opened.")]
+		public readonly int CloseDelay = 80;
 
-		[Desc("How far to search for allied and enemy units.")]
-		public readonly WRange ScanRange = WRange.FromCells(3);
-
-		public object Create(ActorInitializer init) { return new Gate(init, this); }
+		public override object Create(ActorInitializer init) { return new Gate(init, this); }
 	}
 
-	public class Gate : ITick, IOccupySpace, INotifyAddedToWorld, INotifyRemovedFromWorld
+	public class Gate : Building, IGate, ITick, INotifyBlockingMove
 	{
 		readonly GateInfo info;
 		readonly Actor self;
-		readonly RenderSimple renderSimple;
-		readonly CPos topLeft;
+		readonly WithSpriteBody wsb;
 
-		WPos center;
-		bool cachedOpen;
-		Pair<CPos, SubCell>[] blockedCells;
+		bool isOpen;
+		bool opening;
 
-		public Gate(ActorInitializer init, GateInfo info)
+		int remainingTime;
+
+		public Gate(ActorInitializer init, GateInfo info) : base(init, info)
 		{
 			this.info = info;
 			this.self = init.Self;
 
-			renderSimple = self.Trait<RenderSimple>();
-
-			topLeft = init.Get<LocationInit, CPos>();
-			center = init.World.Map.CenterOfCell(topLeft) +
-				((init.World.Map.CenterOfCell(CPos.Zero + new CVec(info.Dimensions.X, info.Dimensions.Y))
-					- init.World.Map.CenterOfCell(new CPos(1, 1))) / 2);
-
-			blockedCells = BlockedCells().Select(c => Pair.New(c, SubCell.FullCell)).ToArray();
+			wsb = self.Trait<WithSpriteBody>();
 		}
 
-		public CPos TopLeft { get { return topLeft; } }
-		public WPos CenterPosition { get { return center; } }
-		public IEnumerable<Pair<CPos, SubCell>> OccupiedCells() { return cachedOpen ? new Pair<CPos, SubCell>[0] : blockedCells; }
+		#region IGate implementation
 
-		public IEnumerable<CPos> BlockedCells()
+		public bool IsOpen() { return isOpen; }
+
+		public bool CanOpen(Actor opener)
 		{
-			var footprint = info.Footprint.Where(x => !char.IsWhiteSpace(x)).ToArray();
-			foreach (var tile in FootprintUtils.TilesWhere(self.Info.Name, (CVec)info.Dimensions, footprint, a => a == '-'))
-				yield return tile + topLeft;
+			return !self.IsDisabled() && BuildComplete && opener.AppearsFriendlyTo(self);
 		}
 
-		public void AddedToWorld(Actor self)
+		public void OnOpen(Actor opener)
 		{
-			self.World.ActorMap.AddInfluence(self, this);
-			self.World.ActorMap.AddPosition(self, this);
-			self.World.ScreenMap.Add(self);
+			Open();
 		}
 
-		public void RemovedFromWorld(Actor self)
-		{
-			self.World.ActorMap.RemoveInfluence(self, this);
-			self.World.ActorMap.RemovePosition(self, this);
-			self.World.ScreenMap.Remove(self);
-		}
+		#endregion
+
+		#region ITick implementation
 
 		public void Tick(Actor self)
 		{
-			if (self.IsDisabled())
+			if (self.IsDisabled() || !BuildComplete)
 				return;
 
-			var open = UnitsInRange().Where(a => !a.Owner.NonCombatant && a.HasTrait<Mobile>()).All(a => a.AppearsFriendlyTo(self));
-			if (open != cachedOpen)
+			if (isOpen)
 			{
-				self.World.ActorMap.RemoveInfluence(self, this);
-
-				cachedOpen = open;
-
-				Action after = () => self.World.ActorMap.AddInfluence(self, this);
-
-				if (cachedOpen)
-					Open(after);
-				else
-					Close(after);
+				if (remainingTime-- <= 0)
+				{
+					if (!IsBlocked())
+						Close();
+					else
+						remainingTime = info.CloseDelay;
+				}
+				else if (remainingTime % 10 == 0 && IsBlocked())
+					remainingTime = info.CloseDelay;
 			}
 		}
 
-		IEnumerable<Actor> UnitsInRange()
+		#endregion
+
+		#region INotifyBlockingMove implementation
+
+		public void OnNotifyBlockingMove(Actor self, Actor blocking)
 		{
-			return self.World.FindActorsInCircle(self.CenterPosition, info.ScanRange)
-				.Where(a => a.IsInWorld && a != self && !a.Destroyed);
+			if (!self.IsDisabled() && BuildComplete && !isOpen && CanOpen(blocking))
+				Open();
 		}
 
-		void Open(Action after)
-		{
-			Sound.Play(info.OpeningSound, self.CenterPosition);
+		#endregion
 
-			renderSimple.DefaultAnimation.PlayBackwardsThen(info.ClosingSequence,
-				() => { renderSimple.DefaultAnimation.PlayRepeating(info.OpenSequence); after(); });
+		bool IsBlocked()
+		{
+			var eligibleLocations = FootprintUtils.Tiles(self).ToList();
+			foreach (var loc in eligibleLocations)
+			{
+				var blockers = self.World.ActorMap.GetActorsAt(loc).Where(a => a != self);
+				if (blockers != null && blockers.Any())
+					return true;
+			}
+
+			return false;
 		}
 
-		void Close(Action after)
+		void Open()
 		{
-			Sound.Play(info.ClosingSound, self.CenterPosition);
+			if (!opening && !isOpen)
+			{
+				opening = true;
+				Game.Sound.Play(info.OpeningSound, self.CenterPosition);
 
-			renderSimple.DefaultAnimation.PlayThen(info.ClosingSequence,
-				() => { renderSimple.DefaultAnimation.PlayRepeating(info.ClosedSequence); after(); });
+				wsb.PlayCustomAnimationBackwards(self, info.ClosingSequence,
+					() => {
+						wsb.PlayCustomAnimationRepeating(self, info.OpenSequence);
+						Opened();
+					});
+			}
+		}
+
+		void Opened()
+		{
+			self.World.ActorMap.RemoveInfluence(self, this);
+			isOpen = true;
+			opening = false;
+			remainingTime = info.CloseDelay;
+		}
+
+		void Close()
+		{
+			if (isOpen)
+			{
+				isOpen = false;
+
+				Game.Sound.Play(info.ClosingSound, self.CenterPosition);
+
+				wsb.PlayCustomAnimation(self, info.ClosingSequence);
+				self.World.ActorMap.AddInfluence(self, this);
+			}
 		}
 	}
 }

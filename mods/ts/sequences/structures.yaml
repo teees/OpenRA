@@ -526,16 +526,127 @@ gawall:
 
 gagate_a:
 	Defaults:
-		Offset: 0, -12
+		Offset: -24, -24
 		UseTilesetCode: true
+	idle:
+	damaged-idle:
+		Start: 10
+	dead:
+		Start: 20
+		Tick: 400
 	open:
 		Start: 9
+	damaged-open:
+		Start: 19
 	closing:
-		Frames: 9, 8, 7, 6, 5, 4, 3, 2, 1
-		Length: 9
+		Frames: 8, 7, 6, 5, 4, 3, 2, 1
+		Length: 8
+	damaged-closing:
+		Frames: 18, 17, 16, 15, 14, 13, 12, 11
+		Length: 8
 	closed:
 		Start: 0
+	damaged-closed:
+		Start: 10
+	make:
+		Frames: 9, 8, 7, 6, 5, 4, 3, 2, 1
+		Length: 9
 	icon: gateicon
+		Offset: 0, 0
+		UseTilesetCode: false
+
+gagate_b:
+	Defaults:
+		Offset: 24, -24
+		UseTilesetCode: true
+	idle:
+	damaged-idle:
+		Start: 10
+	dead:
+		Start: 20
+		Tick: 400
+	open:
+		Start: 9
+	damaged-open:
+		Start: 19
+	closing:
+		Frames: 8, 7, 6, 5, 4, 3, 2, 1
+		Length: 8
+	damaged-closing:
+		Frames: 18, 17, 16, 15, 14, 13, 12, 11
+		Length: 8
+	closed:
+		Start: 0
+	damaged-closed:
+		Start: 10
+	make:
+		Frames: 9, 8, 7, 6, 5, 4, 3, 2, 1
+		Length: 9
+	icon: gat2icon
+		Offset: 0, 0
+		UseTilesetCode: false
+
+nagate_a:
+	Defaults:
+		Offset: -24, -24
+		UseTilesetCode: true
+		Tick: 80
+	idle:
+	damaged-idle:
+		Start: 7
+	dead:
+		Start: 14
+		Tick: 400
+	open:
+		Start: 6
+	damaged-open:
+		Start: 13
+	closing:
+		Frames: 5, 4, 3, 2, 1
+		Length: 5
+	damaged-closing:
+		Frames: 12, 11, 10, 9, 8
+		Length: 5
+	closed:
+		Start: 0
+	damaged-closed:
+		Start: 7
+	make:
+		Frames: 6, 5, 4, 3, 2, 1
+		Length: 6
+	icon: ngaticon
+		Offset: 0, 0
+		UseTilesetCode: false
+
+nagate_b:
+	Defaults:
+		Offset: 24, -24
+		UseTilesetCode: true
+		Tick: 80
+	idle:
+	damaged-idle:
+		Start: 7
+	dead:
+		Start: 14
+		Tick: 400
+	open:
+		Start: 6
+	damaged-open:
+		Start: 13
+	closing:
+		Frames: 5, 4, 3, 2, 1
+		Length: 5
+	damaged-closing:
+		Frames: 12, 11, 10, 9, 8
+		Length: 5
+	closed:
+		Start: 0
+	damaged-closed:
+		Start: 7
+	make:
+		Frames: 6, 5, 4, 3, 2, 1
+		Length: 6
+	icon: nga2icon
 		Offset: 0, 0
 		UseTilesetCode: false
 

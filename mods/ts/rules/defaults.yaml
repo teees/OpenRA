@@ -731,14 +731,17 @@
 		Type: Heavy
 	LineBuildNode:
 		Types: wall, turret
-	-RenderBuilding:
-	RenderSimple:
-		Sequence: closed
-	-FrozenUnderFog:
-	-Selectable:
+	BlocksProjectiles:
+		Height: 640
 	-Building:
-	-WithMakeAnimation:
-	-TargetableBuilding:
-	-WithBuildingExplosion:
-	-Sellable:
+	-Capturable:
+	-GivesBuildableArea:
+	-MustBeDestroyed:
+	Power:
+		Amount: 0
+	CanPowerDown:
+		IndicatorPalette: mouse
 	Gate:
+		Adjacent: 4
+		BuildSounds: place2.aud
+		TerrainTypes: Clear, Rough, Road, DirtRoad, Green, Sand, Pavement
