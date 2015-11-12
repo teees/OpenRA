@@ -227,12 +227,14 @@ namespace OpenRA.Mods.Common.Activities
 
 			var nextCell = path[path.Count - 1];
 
+			var containsClosedGate = mobile.ContainsClosedGate(nextCell);
+
 			// Next cell in the move is blocked by another actor
-			if (!mobile.CanMoveFreelyInto(nextCell, ignoredActor, true))
+			if (!mobile.CanMoveFreelyInto(nextCell, ignoredActor, true) || containsClosedGate)
 			{
 				// Are we close enough?
 				var cellRange = nearEnough.Length / 1024;
-				if ((mobile.ToCell - destination.Value).LengthSquared <= cellRange * cellRange)
+				if ((mobile.ToCell - destination.Value).LengthSquared <= cellRange * cellRange && !containsClosedGate)
 				{
 					path.Clear();
 					return null;
