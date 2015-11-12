@@ -8,14 +8,18 @@
  */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using OpenRA.Primitives;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.Common.Traits
 {
+	public interface IGate
+	{
+		bool IsOpen();
+		bool CanOpen(Actor opener);
+		void OnOpen(Actor opener);
+	}
+
 	[Desc("Will open and be passable for actors that appear friendly when there are no enemies in range.")]
 	public class GateInfo : BuildingInfo, ITraitInfo, Requires<WithSpriteBodyInfo>
 	{
@@ -51,25 +55,19 @@ namespace OpenRA.Mods.Common.Traits
 			wsb = self.Trait<WithSpriteBody>();
 		}
 
-		#region IGate implementation
+		bool IGate.IsOpen() { return isOpen; }
 
-		public bool IsOpen() { return isOpen; }
-
-		public bool CanOpen(Actor opener)
+		bool IGate.CanOpen(Actor opener)
 		{
 			return !self.IsDisabled() && BuildComplete && opener.AppearsFriendlyTo(self);
 		}
 
-		public void OnOpen(Actor opener)
+		void IGate.OnOpen(Actor opener)
 		{
 			Open();
 		}
 
-		#endregion
-
-		#region ITick implementation
-
-		public void Tick(Actor self)
+		void ITick.Tick(Actor self)
 		{
 			if (self.IsDisabled() || !BuildComplete)
 				return;
@@ -88,17 +86,11 @@ namespace OpenRA.Mods.Common.Traits
 			}
 		}
 
-		#endregion
-
-		#region INotifyBlockingMove implementation
-
-		public void OnNotifyBlockingMove(Actor self, Actor blocking)
+		void INotifyBlockingMove.OnNotifyBlockingMove(Actor self, Actor blocking)
 		{
-			if (!self.IsDisabled() && BuildComplete && !isOpen && CanOpen(blocking))
+			if (!self.IsDisabled() && BuildComplete && !isOpen && (this as IGate).CanOpen(blocking))
 				Open();
 		}
-
-		#endregion
 
 		bool IsBlocked()
 		{

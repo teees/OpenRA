@@ -288,13 +288,6 @@ namespace OpenRA.Traits
 		bool CrushableBy(HashSet<string> crushClasses, Player owner);
 	}
 
-	public interface IGate
-	{
-		bool IsOpen();
-		bool CanOpen(Actor opener);
-		void OnOpen(Actor opener);
-	}
-
 	public interface ITraitInfo { object Create(ActorInitializer init); }
 
 	public class TraitInfo<T> : ITraitInfo where T : new() { public virtual object Create(ActorInitializer init) { return new T(); } }
