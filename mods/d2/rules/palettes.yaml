@@ -1,6 +1,14 @@
 ^Palettes:
 	PaletteFromCurrentTileset:
 		Name: terrain
+	PaletteFromFile@dune2:
+		Name: dune2
+		Filename: IBM.PAL
+		ShadowIndex: 1
+	PaletteFromFile@d2k:
+		Name: d2k
+		Filename: PALETTE.BIN
+		ShadowIndex: 1
 	PaletteFromFile@chrome:
 		Name: chrome
 		Filename: IBM.PAL
@@ -16,10 +24,6 @@
 		Filename: IBM.PAL
 		ShadowIndex: 4
 		AllowModifiers: false
-	PaletteFromFile@dune2:
-		Name: dune2
-		Filename: IBM.PAL
-		ShadowIndex: 1
 	PaletteFromFile@shroud:
 		Name: shroud
 		Filename: IBM.PAL
