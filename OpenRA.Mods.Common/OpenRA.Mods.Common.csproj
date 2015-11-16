@@ -282,6 +282,7 @@
     <Compile Include="Traits\Buildings\Exit.cs" />
     <Compile Include="Traits\Buildings\FootprintUtils.cs" />
     <Compile Include="Traits\Buildings\FreeActor.cs" />
+    <Compile Include="Traits\Buildings\Gate.cs" />
     <Compile Include="Traits\Buildings\LineBuild.cs" />
     <Compile Include="Traits\Buildings\LineBuildNode.cs" />
     <Compile Include="Traits\Buildings\PrimaryBuilding.cs" />
@@ -714,6 +715,7 @@
     <Compile Include="EditorBrushes\EditorCopyPasteBrush.cs" />
     <Compile Include="Traits\World\EditorSelectionLayer.cs" />
     <Compile Include="Graphics\DetectionCircleRenderable.cs" />
+    <Compile Include="Traits\Render\WithGateSpriteBody.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

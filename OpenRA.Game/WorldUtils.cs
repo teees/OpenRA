@@ -41,6 +41,23 @@ namespace OpenRA
 			}
 		}
 
+		public static bool ContainsTemporaryBlocker(this World world, CPos cell, Actor ignoreActor = null)
+		{
+			var temporaryBlockers = world.ActorMap.GetActorsAt(cell);
+			foreach (var temporaryBlocker in temporaryBlockers)
+			{
+				if (temporaryBlocker == ignoreActor)
+					continue;
+
+				var temporaryBlockerTraits = temporaryBlocker.TraitsImplementing<ITemporaryBlocker>();
+				foreach (var temporaryBlockerTrait in temporaryBlockerTraits)
+					if (temporaryBlockerTrait.IsBlocking(temporaryBlocker, cell))
+						return true;
+			}
+
+			return false;
+		}
+
 		public static void DoTimed<T>(this IEnumerable<T> e, Action<T> a, string text)
 		{
 			// PERF: This is a hot path and must run with minimal added overhead.

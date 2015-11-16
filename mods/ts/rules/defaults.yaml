@@ -732,3 +732,30 @@
 	CustomSelectionSize:
 		CustomBounds: 220,220
 
+^Gate:
+	Inherits: ^Building
+	Valued:
+		Cost: 250
+	Health:
+		HP: 350
+	Armor:
+		Type: Heavy
+	LineBuildNode:
+		Types: wall, gate
+	-Building:
+	-Capturable:
+	-GivesBuildableArea:
+	-MustBeDestroyed:
+	-WithSpriteBody:
+	WithGateSpriteBody:
+	Power:
+		Amount: 0
+	CanPowerDown:
+		IndicatorPalette: mouse
+	Gate:
+		Adjacent: 4
+		BuildSounds: place2.aud
+		OpeningSound: gateup1.aud
+		ClosingSound: gatedwn1.aud
+		TerrainTypes: Clear, Rough, Road, DirtRoad, Green, Sand, Pavement
+		BlocksProjectilesHeight: 640

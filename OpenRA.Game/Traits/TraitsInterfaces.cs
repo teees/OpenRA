@@ -282,6 +282,12 @@ namespace OpenRA.Traits
 		bool CanEnterTargetNow(Actor self, Target target);
 	}
 
+	public interface ITemporaryBlocker
+	{
+		bool CanRemoveBlockage(Actor self, Actor blocking);
+		bool IsBlocking(Actor self, CPos cell);
+	}
+
 	public interface INotifyBlockingMove { void OnNotifyBlockingMove(Actor self, Actor blocking); }
 
 	public interface IFacing
