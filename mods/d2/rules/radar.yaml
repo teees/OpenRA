@@ -1,5 +1,5 @@
-radar.dune2:
-	Inherits: ^Dune2.Building
+radar:
+	Inherits: ^Building
 	RequiresPower:
 	CanPowerDown:
 	#DisabledOverlay:
@@ -27,7 +27,7 @@ radar.dune2:
 	WithTilesetBody:
 		SkipFrames: 1, 2
 	RenderSprites:
-		Image: radar.dune2
+		Image: radar
 		PlayerPalette: player
 	WithIdleOverlay@DISH:
 		Sequence: idle-dish

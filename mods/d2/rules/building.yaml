@@ -1,4 +1,4 @@
-^Dune2.Building:
+^Building:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^SpriteActor
 	SelectionDecorations:

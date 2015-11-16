@@ -1,4 +1,4 @@
-silo.dune2:
+silo:
 	idle: ICON.ICN
 		Start: 372
 		Offset: 0,0

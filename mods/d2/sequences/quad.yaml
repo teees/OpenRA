@@ -1,4 +1,4 @@
-quad.dune2:
+quad:
 	idle:
 		Combine:
 			UNITS.SHP:

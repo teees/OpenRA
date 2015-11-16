@@ -1,4 +1,4 @@
-conyard.dune2:
+conyard:
 	idle: ICON.ICN
 		Start: 292
 		Offset: 0,0

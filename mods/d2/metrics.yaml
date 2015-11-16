@@ -21,7 +21,7 @@ Metrics:
 	TextContrast: false
 	TextContrastColor: 000000
 	ColorPickerRemapIndices: 144, 145, 146, 147, 148, 149
-	ColorPickerActorType: ^carryall.dune2.colorpicker
+	ColorPickerActorType: ^carryall.colorpicker
 	SpawnFont: TinyBold
 	SpawnColor: FFFFFF
 	SpawnContrastColor: 000000

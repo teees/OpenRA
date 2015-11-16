@@ -1,4 +1,4 @@
-radar.dune2:
+radar:
 	idle: ICON.ICN
 		Start: 379
 		Offset: 0,0

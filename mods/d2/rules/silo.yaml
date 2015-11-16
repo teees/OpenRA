@@ -1,7 +1,7 @@
-silo.dune2:
-	Inherits: ^Dune2.Building
+silo:
+	Inherits: ^Building
 	Buildable:
-		#Prerequisites: refinery.dune2
+		#Prerequisites: refinery
 		Queue: Building
 		BuildPaletteOrder: 30
 	Selectable:
@@ -21,7 +21,7 @@ silo.dune2:
 	WithTilesetBody:
 		SkipFrames: 1
 	RenderSprites:
-		Image: silo.dune2
+		Image: silo
 		PlayerPalette: player
 	StoresResources:
 		PipColor: green

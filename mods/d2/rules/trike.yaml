@@ -1,5 +1,5 @@
-trike.dune2:
-	Inherits: ^Dune2.Vehicle
+trike:
+	Inherits: ^Vehicle
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10

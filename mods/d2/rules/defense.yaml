@@ -1,5 +1,5 @@
-^Dune2.Defense:
-	Inherits: ^Dune2.Building
+^Defense:
+	Inherits: ^Building
 	WithTurret:
 	AttackTurreted:
 	AutoTarget:

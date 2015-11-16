@@ -1,4 +1,4 @@
-windtrap.dune2:
+windtrap:
 	idle: ICON.ICN
 		Start: 304
 		Offset: 0,0

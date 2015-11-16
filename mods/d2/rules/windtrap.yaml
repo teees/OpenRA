@@ -1,5 +1,5 @@
-windtrap.dune2:
-	Inherits: ^Dune2.Building
+windtrap:
+	Inherits: ^Building
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 10
@@ -19,7 +19,7 @@ windtrap.dune2:
 	WithTilesetBody:
 		SkipFrames: 3
 	RenderSprites:
-		Image: windtrap.dune2
+		Image: windtrap
 		PlayerPalette: player
 	WithIdleOverlay@TOP:
 		Sequence: idle-top

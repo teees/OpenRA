@@ -86,13 +86,13 @@ World:
 	MPStartUnits@mcv:
 		Class: none
 		ClassName: MCV Only
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		Factions: atreides, ordos, harkonnen
 	MPStartUnits@lightatreides:
 		Class: light
 		ClassName: Light Support
 		Factions: atreides
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, grenadier, trike, quad
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
@@ -100,7 +100,7 @@ World:
 		Class: light
 		ClassName: Light Support
 		Factions: harkonnen
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, trooper, trike, quad
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
@@ -108,7 +108,7 @@ World:
 		Class: light
 		ClassName: Light Support
 		Factions: ordos
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, engineer, raider, quad
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
@@ -116,7 +116,7 @@ World:
 		Class: heavy
 		ClassName: Heavy Support
 		Factions: atreides
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, grenadier, trike, combat_tank_a, missile_tank
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
@@ -124,7 +124,7 @@ World:
 		Class: heavy
 		ClassName: Heavy Support
 		Factions: harkonnen
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, engineer, quad, combat_tank_h, siege_tank
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
@@ -132,7 +132,7 @@ World:
 		Class: heavy
 		ClassName: Heavy Support
 		Factions: ordos
-		BaseActor: mcv.dune2
+		BaseActor: mcv
 		SupportActors: light_inf, light_inf, light_inf, trooper, engineer, raider, combat_tank_o, missile_tank
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5

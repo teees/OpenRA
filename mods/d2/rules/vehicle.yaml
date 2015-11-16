@@ -1,4 +1,4 @@
-^Dune2.Vehicle:
+^Vehicle:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^GainsExperience
 	Inherits@3: ^SpriteActor
@@ -41,8 +41,8 @@
 		Sequence: pickup-indicator
 		Offset: -12, -12
 
-^Dune2.VehicleHusk:
-	Inherits: ^Dune2.Husk
+^VehicleHusk:
+	Inherits: ^Husk
 	Husk:
 		AllowedTerrain: Sand, Rock, Transition, Concrete, Spice, SpiceBlobs, Dune
 	Burns:

@@ -1,4 +1,4 @@
-harvester.dune2:
+harvester:
 	idle:
 		Combine:
 			UNITS.SHP:
@@ -26,7 +26,7 @@ harvester.dune2:
 		Start: 86
 		Offset: 0,0
 
-harvester.dune2.husk:
+harvester.husk:
 	idle: DATA.R8
 		Start: 1699
 		Facings: -32

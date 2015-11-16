@@ -1,5 +1,5 @@
-mcv.dune2:
-	Inherits: ^Dune2.Vehicle
+mcv:
+	Inherits: ^Vehicle
 	Buildable:
 		#Prerequisites: repair, upgrade.heavy, ~techlevel.medium
 		Queue: Armor
@@ -29,12 +29,12 @@ mcv.dune2:
 		EmptyWeapon: UnitExplodeLarge
 	Transforms:
 		Facing: 16
-		IntoActor: conyard.dune2
+		IntoActor: conyard
 		Offset: -1,-1
 		TransformSounds: BUILD1.WAV
 		NoTransformNotification: CannotDeploy
 	SpawnActorOnDeath:
-		Actor: mcv.dune2.husk
+		Actor: mcv.husk
 	AttractsWorms:
 		Intensity: 700
 	SelectionDecorations:

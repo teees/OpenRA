@@ -1,4 +1,4 @@
-mcv.dune2:
+mcv:
 	idle:
 		Combine:
 			UNITS.SHP:
@@ -14,7 +14,7 @@ mcv.dune2:
 		Start: 89
 		Offset: 0,-0
 
-mcv.dune2.husk:
+mcv.husk:
 	idle: DATA.R8
 		Start: 1795
 		Facings: -32

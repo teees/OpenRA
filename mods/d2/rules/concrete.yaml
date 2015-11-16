@@ -1,4 +1,4 @@
-^concrete.dune2:
+^concrete:
 	AlwaysVisible:
 	Building:
 		Adjacent: 4
@@ -17,8 +17,8 @@
 		Queue: Building
 		BuildPaletteOrder: 10
 
-concrete1.dune2:
-	Inherits: ^concrete.dune2
+concrete1:
+	Inherits: ^concrete
 	Building:
 		Footprint: x
 		Dimensions: 1,1
@@ -26,12 +26,12 @@ concrete1.dune2:
 		Template: 126
 		TerrainTypes: Rock
 	RenderSprites:
-		Image: concrete1.dune2
+		Image: concrete1
 	Valued:
 		Cost: 20
 
-concrete2.dune2:
-	Inherits: ^concrete.dune2
+concrete2:
+	Inherits: ^concrete
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
@@ -39,7 +39,7 @@ concrete2.dune2:
 		Template: 127
 		TerrainTypes: Rock
 	RenderSprites:
-		Image: concrete2.dune2
+		Image: concrete2
 	Valued:
 		Cost: 50
 	Buildable:

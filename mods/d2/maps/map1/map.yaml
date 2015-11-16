@@ -1,0 +1,166 @@
+MapFormat: 8
+
+RequiresMod: d2
+
+Title: Name your map here
+
+Description: Describe your map here
+
+Author: Your name here
+
+Tileset: DUNE2
+
+MapSize: 130,130
+
+Bounds: 1,1,128,128
+
+Visibility: Lobby
+
+Type: Conquest
+
+Videos:
+
+Options:
+
+Players:
+	PlayerReference@Neutral:
+		Name: Neutral
+		OwnsWorld: True
+		NonCombatant: True
+		Faction: Random
+	PlayerReference@Creeps:
+		Name: Creeps
+		NonCombatant: True
+		Faction: Random
+	PlayerReference@Multi0:
+		Name: Multi0
+		Playable: True
+		Faction: Random
+		Enemies: Creeps
+	PlayerReference@Multi1:
+		Name: Multi1
+		Playable: True
+		Faction: Random
+		Enemies: Creeps
+
+Actors:
+	Actor0: mpspawn
+		Owner: Neutral
+		Location: 113,9
+	Actor1: mpspawn
+		Owner: Neutral
+		Location: 62,64
+	Actor2: concrete2
+		Owner: Neutral
+		Location: 67,70
+	Actor3: concrete2
+		Owner: Neutral
+		Location: 67,68
+	Actor4: concrete2
+		Owner: Neutral
+		Location: 65,68
+	Actor5: concrete2
+		Owner: Neutral
+		Location: 65,70
+	Actor6: concrete2
+		Owner: Neutral
+		Location: 63,70
+	Actor7: concrete2
+		Owner: Neutral
+		Location: 63,68
+	Actor8: concrete2
+		Owner: Neutral
+		Location: 67,66
+	Actor9: concrete2
+		Owner: Neutral
+		Location: 67,64
+	Actor10: concrete2
+		Owner: Neutral
+		Location: 65,64
+	Actor11: concrete2
+		Owner: Neutral
+		Location: 65,66
+	Actor12: concrete2
+		Owner: Neutral
+		Location: 63,66
+	Actor13: concrete2
+		Owner: Neutral
+		Location: 63,64
+	Actor14: concrete2
+		Owner: Neutral
+		Location: 114,11
+	Actor15: concrete2
+		Owner: Neutral
+		Location: 114,9
+	Actor16: concrete2
+		Owner: Neutral
+		Location: 116,9
+	Actor17: concrete2
+		Owner: Neutral
+		Location: 116,11
+	Actor18: concrete2
+		Owner: Neutral
+		Location: 111,14
+	Actor19: concrete2
+		Owner: Neutral
+		Location: 111,12
+	Actor20: concrete2
+		Owner: Neutral
+		Location: 112,11
+	Actor21: concrete2
+		Owner: Neutral
+		Location: 111,11
+	Actor22: concrete2
+		Owner: Neutral
+		Location: 112,13
+	Actor23: concrete2
+		Owner: Neutral
+		Location: 112,14
+	Actor24: concrete2
+		Owner: Neutral
+		Location: 111,16
+	Actor25: concrete2
+		Owner: Neutral
+		Location: 112,16
+	Actor26: concrete2
+		Owner: Neutral
+		Location: 111,17
+	Actor27: concrete2
+		Owner: Neutral
+		Location: 112,18
+	Actor28: concrete2
+		Owner: Neutral
+		Location: 114,17
+	Actor29: concrete2
+		Owner: Neutral
+		Location: 114,18
+	Actor30: concrete2
+		Owner: Neutral
+		Location: 115,18
+	Actor31: concrete2
+		Owner: Neutral
+		Location: 115,17
+	Actor32: concrete2
+		Owner: Neutral
+		Location: 113,19
+	Actor33: concrete2
+		Owner: Neutral
+		Location: 114,19
+
+Smudges:
+
+Rules:
+
+Sequences:
+
+VoxelSequences:
+
+Weapons:
+
+Voices:
+
+Music:
+
+Notifications:
+
+Translations:

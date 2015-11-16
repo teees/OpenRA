@@ -1,4 +1,4 @@
-^Dune2.Plane:
+^Plane:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^SpriteActor
 	AppearsOnRadar:
@@ -14,8 +14,8 @@
 	WithFacingSpriteBody:
 	WithShadow:
 
-^Dune2.AircraftHusk:
-	Inherits: ^Dune2.Husk
+^AircraftHusk:
+	Inherits: ^Husk
 	WithShadow:
 	FallsToEarth:
 		Spins: False

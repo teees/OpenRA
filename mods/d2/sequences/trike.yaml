@@ -1,4 +1,4 @@
-trike.dune2:
+trike:
 	idle:
 		Combine:
 			UNITS.SHP:

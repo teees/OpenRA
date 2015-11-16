@@ -1,4 +1,4 @@
-refinery.dune2:
+refinery:
 	idle: ICON.ICN
 		Start: 332
 		Offset: 0,0

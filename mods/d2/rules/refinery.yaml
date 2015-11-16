@@ -1,5 +1,5 @@
-refinery.dune2:
-	Inherits: ^Dune2.Building
+refinery:
+	Inherits: ^Building
 	Buildable:
 		#Prerequisites: construction_yard, wind_trap
 		Queue: Building
@@ -33,14 +33,14 @@ refinery.dune2:
 	CustomSellValue:
 		Value: 500
 	FreeActorWithDelivery:
-		Actor: harvester.dune2
+		Actor: harvester
 		DeliveryOffset: 2,1
-		DeliveringActor: carryall.dune2.reinforce
+		DeliveringActor: carryall.reinforce
 		Facing: 180
 	WithTilesetBody:
 		SkipFrames: 1,2,5
 	RenderSprites:
-		Image: refinery.dune2
+		Image: refinery
 	Power:
 		Amount: -75
 	WithIdleOverlay@TOP:

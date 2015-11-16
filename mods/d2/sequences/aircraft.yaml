@@ -1,4 +1,4 @@
-carryall.dune2:
+carryall:
 	idle:
 		Combine:
 			UNITS.SHP:
@@ -26,7 +26,7 @@ carryall.dune2:
 		Facings: -32
 
 
-ornithopter.dune2:
+ornithopter:
 	idle: DATA.R8
 		Start: 1955
 		Facings: -32
@@ -37,7 +37,3 @@ ornithopter.dune2:
 		Start: 85
 		Offset: 0,0
 
-frigate.dune2:
-	idle: DATA.R8
-		Start: 2517
-		Facings: 1

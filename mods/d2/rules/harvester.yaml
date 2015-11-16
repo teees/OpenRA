@@ -1,5 +1,5 @@
-harvester.dune2:
-	Inherits: ^Dune2.Vehicle
+harvester:
+	Inherits: ^Vehicle
 	Buildable:
 		Queue: Armor
 		#Prerequisites: refinery
@@ -34,7 +34,7 @@ harvester.dune2:
 		Weapon: UnitExplodeLarge
 		EmptyWeapon: UnitExplodeLarge
 	SpawnActorOnDeath:
-		Actor: harvester.dune2.husk
+		Actor: harvester.husk
 	WithHarvestOverlay:
 		Palette: effect50alpha
 	#WithDockingAnimation:

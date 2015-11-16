@@ -1,5 +1,5 @@
-conyard.dune2:
-	Inherits: ^Dune2.Building
+conyard:
+	Inherits: ^Building
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -31,7 +31,7 @@ conyard.dune2:
 		SkipFrames: 0
 	PrimaryBuilding:
 	RenderSprites:
-		Image: conyard.dune2
+		Image: conyard
 		PlayerPalette: player
 	WithIdleOverlay@TOP:
 		Sequence: idle-top

@@ -1,4 +1,4 @@
-concrete1.dune2:
+concrete1:
 	idle: ICON.ICN
 		Start: 126
 		Offset: 8,8
@@ -9,7 +9,7 @@ concrete1.dune2:
 		Start: 53
 		Offset: 0,0
 
-concrete2.dune2:
+concrete2:
 	idle: ICON.ICN
 		Start: 126
 		Offset: 0,0

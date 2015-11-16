@@ -1,4 +1,4 @@
-^Dune2.Husk:
+^Husk:
 	Inherits@1: ^SpriteActor
 	Health:
 		HP: 75

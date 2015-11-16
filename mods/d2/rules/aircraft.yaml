@@ -1,5 +1,5 @@
-carryall.dune2.reinforce:
-	Inherits: ^Dune2.Plane
+carryall.reinforce:
+	Inherits: ^Plane
 	Valued:
 		Cost: 1100
 	CustomBuildTimeValue:
@@ -33,47 +33,26 @@ carryall.dune2.reinforce:
 		UpgradeTypes: airborne
 		UpgradeMinEnabledLevel: 1
 	SpawnActorOnDeath:
-		Actor: carryall.dune2.husk
+		Actor: carryall.husk
 	Carryall:
 		Automatic: False
 	RenderSprites:
-		Image: carryall.dune2
+		Image: carryall
 	SelfHealing:
 		Step: 5
 		Ticks: 3
 		HealIfBelow: 50%
 
-carryall.dune2:
-	Inherits: carryall.dune2.reinforce
+carryall:
+	Inherits: carryall.reinforce
 	Carryall:
 		Automatic: True
 	Buildable:
 		Queue: Aircraft
 		BuildPaletteOrder: 120
 
-frigate.dune2:
-	Inherits: ^Dune2.Plane
-	ParaDrop:
-		DropRange: 1c0
-	Tooltip:
-		Name: Frigate
-		Description: Supply spacecraft
-	Aircraft:
-		ROT: 1
-		Speed: 189 # 126 * ~1.5 for balance reasons
-		RepairBuildings:
-		RearmBuildings:
-		Repulsable: False
-		MaximumPitch: 20
-	-AppearsOnRadar:
-	Cargo:
-		MaxWeight: 20
-		PipCount: 10
-	FlyAwayOnIdle:
-	RejectsOrders:
-
-ornithopter.dune2:
-	Inherits: ^Dune2.Plane
+ornithopter:
+	Inherits: ^Plane
 		TargetTypes: Air
 	AttackBomber:
 	Armament:
@@ -94,11 +73,11 @@ ornithopter.dune2:
 	Tooltip:
 		Name: Ornithopter
 	SpawnActorOnDeath:
-		Actor: ornithopter.dune2.husk
+		Actor: ornithopter.husk
 	RejectsOrders:
 
-ornithopter.dune2.husk:
-	Inherits: ^Dune2.AircraftHusk
+ornithopter.husk:
+	Inherits: ^AircraftHusk
 	Tooltip:
 		Name: Ornithopter
 	Aircraft:
@@ -109,8 +88,8 @@ ornithopter.dune2.husk:
 	RenderSprites:
 		Image: ornithopter
 
-carryall.dune2.husk:
-	Inherits: ^Dune2.AircraftHusk
+carryall.husk:
+	Inherits: ^AircraftHusk
 	Tooltip:
 		Name: Carryall
 	Aircraft:
