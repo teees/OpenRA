@@ -1,0 +1,45 @@
+^Dune2.Building:
+	Inherits@1: ^ExistsInWorld
+	Inherits@2: ^SpriteActor
+	SelectionDecorations:
+	Selectable:
+		Priority: 2
+	Targetable:
+		TargetTypes: Ground, C4, Structure
+	Building:
+		Dimensions: 2,2
+		Footprint: xx xx
+		TerrainTypes: Rock, Concrete
+		BuildSounds: BUILD1.WAV
+		Adjacent: 3
+	GivesBuildableArea:
+	Capturable:
+		CaptureThreshold: 1.0
+	SoundOnDamageTransition:
+		DamagedSounds: EXPLSML1.WAV
+		DestroyedSounds: EXPLHG1.WAV
+	#WithSpriteBody:
+	WithTilesetBody:
+	WithBuildingExplosion:
+	RepairableBuilding:
+	EmitInfantryOnSell:
+		ActorTypes: light_inf,light_inf,light_inf,light_inf,light_inf,trooper,trooper,trooper
+	MustBeDestroyed:
+		RequiredForShortGame: true
+	FrozenUnderFog:
+	CaptureNotification:
+	ActorLostNotification:
+		Notification: BuildingLost
+	ShakeOnDeath:
+	Sellable:
+		SellSounds: BUILD1.WAV
+	Guardable:
+		Range: 3c0
+	#WithCrumbleOverlay:
+	Demolishable:
+	DamagedWithoutFoundation:
+	ThrowsShrapnel:
+		Weapons: Debris, Debris2, Debris3, Debris4
+		Pieces: 3, 7
+		Range: 2c0, 5c0
+	#WithMakeAnimation:

@@ -1,0 +1,8 @@
+^carryall.dune2.colorpicker:
+	Inherits: carryall.dune2
+	Aircraft:
+		InitialFacing: 104
+	RenderSprites:
+		Image: carryall.dune2
+		Palette: colorpicker
+

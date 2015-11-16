@@ -1,0 +1,46 @@
+^concrete.dune2:
+	AlwaysVisible:
+	Building:
+		Adjacent: 4
+		TerrainTypes: Rock
+		BuildSounds: CHUNG.WAV
+		AllowInvalidPlacement: true
+	Tooltip:
+		Name: Concrete
+		Description: Provides a strong foundation that prevents\ndamage from the terrain.
+	#WithSpriteBody:
+	WithTilesetBody:
+	RenderSprites:
+	KillsSelf:
+		RemoveInstead: true
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 10
+
+concrete1.dune2:
+	Inherits: ^concrete.dune2
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	LaysTerrain:
+		Template: 126
+		TerrainTypes: Rock
+	RenderSprites:
+		Image: concrete1.dune2
+	Valued:
+		Cost: 20
+
+concrete2.dune2:
+	Inherits: ^concrete.dune2
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	LaysTerrain:
+		Template: 127
+		TerrainTypes: Rock
+	RenderSprites:
+		Image: concrete2.dune2
+	Valued:
+		Cost: 50
+	Buildable:
+		#Prerequisites: upgrade.conyard

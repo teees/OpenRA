@@ -1,0 +1,44 @@
+harvester.dune2:
+	Inherits: ^Dune2.Vehicle
+	Buildable:
+		Queue: Armor
+		#Prerequisites: refinery
+		BuildPaletteOrder: 10
+		InitialActivity: FindResources
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Spice Harvester
+		Description: Collects Spice for processing\n  Unarmed
+	Selectable:
+		Class: harvester
+		Priority: 7
+	Harvester:
+		PipCount: 10
+		Capacity: 40
+		HarvestFacings: 8
+		Resources: Spice
+		UnloadTicksPerBale: 5
+		SearchFromProcRadius: 24
+		SearchFromOrderRadius: 12
+	Health:
+		HP: 1000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 64
+		Crushes: crate, infantry
+	RevealsShroud:
+		Range: 4c0
+	Explodes:
+		Weapon: UnitExplodeLarge
+		EmptyWeapon: UnitExplodeLarge
+	SpawnActorOnDeath:
+		Actor: harvester.dune2.husk
+	WithHarvestOverlay:
+		Palette: effect50alpha
+	#WithDockingAnimation:
+	AttractsWorms:
+		Intensity: 700
+	SelectionDecorations:
+		VisualBounds: 42,42

@@ -1,0 +1,124 @@
+carryall.dune2.reinforce:
+	Inherits: ^Dune2.Plane
+	Valued:
+		Cost: 1100
+	CustomBuildTimeValue:
+		Value: 648
+	Tooltip:
+		Name: Carryall
+		Description: Large winged, planet-bound ship\n  Automatically lifts harvesters.
+	Health:
+		HP: 4800
+	Armor:
+		Type: light
+	Aircraft:
+		CruiseAltitude: 2100
+		InitialFacing: 0
+		ROT: 4
+		Speed: 144 # 112 * ~1.3 for balance reasons
+		LandableTerrainTypes: Sand, Rock, Transition, Spice, Dune
+		RepairBuildings: repair_pad
+		RearmBuildings:
+		Repulsable: False
+		LandAltitude: 100
+		LandWhenIdle: False
+		AirborneUpgrades: airborne
+		CanHover: True
+	Targetable@GROUND:
+		TargetTypes: Ground, Vehicle
+		UpgradeTypes: airborne
+		UpgradeMaxEnabledLevel: 0
+	Targetable@AIRBORNE:
+		TargetTypes: Air
+		UpgradeTypes: airborne
+		UpgradeMinEnabledLevel: 1
+	SpawnActorOnDeath:
+		Actor: carryall.dune2.husk
+	Carryall:
+		Automatic: False
+	RenderSprites:
+		Image: carryall.dune2
+	SelfHealing:
+		Step: 5
+		Ticks: 3
+		HealIfBelow: 50%
+
+carryall.dune2:
+	Inherits: carryall.dune2.reinforce
+	Carryall:
+		Automatic: True
+	Buildable:
+		Queue: Aircraft
+		BuildPaletteOrder: 120
+
+frigate.dune2:
+	Inherits: ^Dune2.Plane
+	ParaDrop:
+		DropRange: 1c0
+	Tooltip:
+		Name: Frigate
+		Description: Supply spacecraft
+	Aircraft:
+		ROT: 1
+		Speed: 189 # 126 * ~1.5 for balance reasons
+		RepairBuildings:
+		RearmBuildings:
+		Repulsable: False
+		MaximumPitch: 20
+	-AppearsOnRadar:
+	Cargo:
+		MaxWeight: 20
+		PipCount: 10
+	FlyAwayOnIdle:
+	RejectsOrders:
+
+ornithopter.dune2:
+	Inherits: ^Dune2.Plane
+		TargetTypes: Air
+	AttackBomber:
+	Armament:
+		Weapon: OrniBomb
+	Health:
+		HP: 900
+	Armor:
+		Type: light
+	Aircraft:
+		ROT: 2
+		Speed: 224 # 189 * ~1.2 for balance reasons
+		RepairBuildings:
+		RearmBuildings:
+		Repulsable: False
+		CanHover: True
+	AmmoPool:
+		Ammo: 5
+	Tooltip:
+		Name: Ornithopter
+	SpawnActorOnDeath:
+		Actor: ornithopter.dune2.husk
+	RejectsOrders:
+
+ornithopter.dune2.husk:
+	Inherits: ^Dune2.AircraftHusk
+	Tooltip:
+		Name: Ornithopter
+	Aircraft:
+		ROT: 5
+		Speed: 224
+		RepairBuildings:
+		RearmBuildings:
+	RenderSprites:
+		Image: ornithopter
+
+carryall.dune2.husk:
+	Inherits: ^Dune2.AircraftHusk
+	Tooltip:
+		Name: Carryall
+	Aircraft:
+		ROT: 4
+		Speed: 144
+		RepairBuildings:
+		RearmBuildings:
+		CanHover: True
+	RenderSprites:
+		Image: carryall
+

@@ -1,0 +1,23 @@
+^Dune2.Plane:
+	Inherits@1: ^ExistsInWorld
+	Inherits@2: ^SpriteActor
+	AppearsOnRadar:
+		UseLocation: yes
+	HiddenUnderFog:
+		Type: CenterPosition
+		AlwaysVisibleStances: None
+	ActorLostNotification:
+	AttackMove:
+	DrawLineToTarget:
+	Voiced:
+		VoiceSet: GenericVoice
+	WithFacingSpriteBody:
+	WithShadow:
+
+^Dune2.AircraftHusk:
+	Inherits: ^Dune2.Husk
+	WithShadow:
+	FallsToEarth:
+		Spins: False
+		Moves: True
+		Explosion: UnitExplodeLarge

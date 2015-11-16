@@ -1,0 +1,37 @@
+conyard.dune2:
+	Inherits: ^Dune2.Building
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 1000
+		Prerequisites: ~disabled
+	Selectable:
+		Bounds: 32,32
+	Health:
+		HP: 3000
+	Armor:
+		Type: cy
+	RevealsShroud:
+		Range: 10c0
+	Production:
+		Produces: Building, Upgrade
+	Exit:
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Construction Yard
+	CustomSellValue:
+		Value: 2000
+	EmitInfantryOnSell:
+		ActorTypes: light_inf, light_inf, engineer
+	BaseBuilding:
+	ProductionBar:
+	Power:
+		Amount: 20
+	WithTilesetBody:
+		SkipFrames: 0
+	PrimaryBuilding:
+	RenderSprites:
+		Image: conyard.dune2
+		PlayerPalette: player
+	WithIdleOverlay@TOP:
+		Sequence: idle-top

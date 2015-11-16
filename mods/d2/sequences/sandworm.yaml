@@ -1,0 +1,17 @@
+sandworm:
+	mouth: DATA.R8
+		Start: 3549
+		Length: 15
+		Tick: 100
+	sand: DATA.R8
+		Start: 3565
+		Length: 20
+		Tick: 100
+	idle: DATA.R8
+		Start: 3586
+		Length: 35
+		Tick: 180
+		BlendMode: Additive
+	burrowed: DATA.R8
+		Start: 39
+	icon: wormicon.shp

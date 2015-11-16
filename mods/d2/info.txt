@@ -1,0 +1,40 @@
+ICON.ICN
+
+0 shadow 50%
+1-6 concrete crater
+7-12 dune crater
+13 ornitopter husk
+14 ornitopter husk on dune crater
+15 dune crater after ornitopter husk gone away
+16 carryall husk
+17 - as for ornitopter
+18 - as for ornithopter
+19 infantry husk
+20 infantry dune after husk gone away
+21-22 infantry skuad husk
+23-24 infantry dead under vehicle
+25 vertical footprint
+26 / footprint
+27 horizontal footprint
+28 \ footprint
+29-32 more footprints
+33 damaged parts
+34-45 walls
+46-107 damaged walls
+108 dot fog
+109 top fog
+110 right
+111 top-right fog
+112 bottom
+113 top+bottom
+114 bottom right
+115 top right bottom
+116 left fog
+117 top left
+118 left and right
+119 left top right
+120 left bottom
+121 top left bottom
+122 left bottom right
+123 filled fog
+124 broken slab

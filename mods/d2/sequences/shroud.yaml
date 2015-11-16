@@ -1,0 +1,9 @@
+shroud:
+	typea: ICON.ICN
+		Start: 109
+		Length: 14
+		Offset: 0,0
+		BlendMode: Multiply
+	full: ICON.ICN
+		Start: 123
+		BlendMode: Multiply

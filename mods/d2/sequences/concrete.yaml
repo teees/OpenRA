@@ -1,0 +1,22 @@
+concrete1.dune2:
+	idle: ICON.ICN
+		Start: 126
+		Offset: 8,8
+	idle-tileset: ICON.ICN
+		Start: 126
+		Offset: 8,8
+	icon: SHAPES.SHP
+		Start: 53
+		Offset: 0,0
+
+concrete2.dune2:
+	idle: ICON.ICN
+		Start: 126
+		Offset: 0,0
+	idle-tileset: ICON.ICN
+		Frames: 126, 126, 126, 126
+		Length 4
+		Offset: 0,0
+	icon: SHAPES.SHP
+		Start: 71
+		Offset: 0,0

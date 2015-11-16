@@ -1,0 +1,52 @@
+refinery.dune2:
+	Inherits: ^Dune2.Building
+	Buildable:
+		#Prerequisites: construction_yard, wind_trap
+		Queue: Building
+		BuildPaletteOrder: 20
+	Selectable:
+		Bounds: 48,32
+	Valued:
+		Cost: 1500
+	CustomBuildTimeValue:
+		Value: 540
+	Tooltip:
+		Name: Spice Refinery
+		Description: Harvesters unload Spice here for processing
+	Building:
+		Footprint: xx= xx=
+		Dimensions: 3,2
+	Health:
+		HP: 3000
+	Armor:
+		Type: building
+	RevealsShroud:
+		Range: 4c768
+#	Refinery:
+#		DockAngle: 160
+#		DockOffset: 2,1
+#		TickRate: 20
+	StoresResources:
+		PipColor: green
+		PipCount: 10
+		Capacity: 2000
+	CustomSellValue:
+		Value: 500
+	FreeActorWithDelivery:
+		Actor: harvester.dune2
+		DeliveryOffset: 2,1
+		DeliveringActor: carryall.dune2.reinforce
+		Facing: 180
+	WithTilesetBody:
+		SkipFrames: 1,2,5
+	RenderSprites:
+		Image: refinery.dune2
+	Power:
+		Amount: -75
+	WithIdleOverlay@TOP:
+		Sequence: idle-top
+	WithIdleOverlay@DOCK1:
+		Sequence: idle-dock-top
+	WithIdleOverlay@DOCK2:
+		Sequence: idle-dock-bottom
+	ProvidesPrerequisite@buildingname:

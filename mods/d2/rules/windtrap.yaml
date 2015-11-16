@@ -1,0 +1,29 @@
+windtrap.dune2:
+	Inherits: ^Dune2.Building
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 10
+	Selectable:
+		Bounds: 32,32
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Windtrap
+		Description: Provides power for other structures
+	Health:
+		HP: 400
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithTilesetBody:
+		SkipFrames: 3
+	RenderSprites:
+		Image: windtrap.dune2
+		PlayerPalette: player
+	WithIdleOverlay@TOP:
+		Sequence: idle-top
+	Power:
+		Amount: 100
+	ScalePowerWithHealth:
+	ProvidesPrerequisite@buildingname:

@@ -1,0 +1,4 @@
+^Dune2.Tank:
+	Inherits: ^Dune2.Vehicle
+	Mobile:
+		Crushes: crate, infantry, spicebloom

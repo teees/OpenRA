@@ -1,0 +1,36 @@
+silo.dune2:
+	Inherits: ^Dune2.Building
+	Buildable:
+		#Prerequisites: refinery.dune2
+		Queue: Building
+		BuildPaletteOrder: 30
+	Selectable:
+		Bounds: 32,32
+	Valued:
+		Cost: 150
+	Tooltip:
+		Name: Silo
+		Description: Stores excess harvested Spice
+	-GivesBuildableArea:
+	Health:
+		HP: 300
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithTilesetBody:
+		SkipFrames: 1
+	RenderSprites:
+		Image: silo.dune2
+		PlayerPalette: player
+	StoresResources:
+		PipColor: green
+		PipCount: 5
+		Capacity: 2000
+	-EmitInfantryOnSell:
+	WithIdleOverlay@TOP:
+		Sequence: idle-top
+	Power:
+		Amount: -5
+	MustBeDestroyed:
+		RequiredForShortGame: false

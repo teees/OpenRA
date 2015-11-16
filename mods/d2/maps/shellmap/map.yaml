@@ -1,0 +1,554 @@
+MapFormat: 8
+
+RequiresMod: d2
+
+Title: d2 mod shellmap
+
+Description: example shellmap
+
+Author: OpenRA Authors
+
+Tileset: DUNE2
+
+MapSize: 130,130
+
+Bounds: 1,1,128,128
+
+Visibility: Shellmap
+
+Type: Conquest
+
+Videos:
+
+Options:
+
+Players:
+	PlayerReference@Neutral:
+		Name: Neutral
+		OwnsWorld: True
+		NonCombatant: True
+		Faction: atreides
+	PlayerReference@Atreides:
+		Name: Atreides
+		Faction: atreides
+		Color: ABB7E4
+	PlayerReference@Creeps:
+		Name: Creeps
+		NonCombatant: True
+		Faction: atreides
+		Color: EF00FE
+		Enemies: Atreides
+
+Actors:
+	Actor0: silo.dune2
+		Owner: Atreides
+		Location: 66,65
+	Actor1: windtrap.dune2
+		Owner: Atreides
+		Location: 66,63
+	Actor3: radar.dune2
+		Owner: Atreides
+		Location: 69,68
+	Actor5: silo.dune2
+		Owner: Atreides
+		Location: 61,73
+	Actor6: silo.dune2
+		Owner: Atreides
+		Location: 61,75
+	Actor7: silo.dune2
+		Owner: Atreides
+		Location: 61,77
+	Actor8: windtrap.dune2
+		Owner: Atreides
+		Location: 66,61
+	Actor9: wormspawner
+		Owner: Atreides
+		Location: 41,61
+	Actor10: wormspawner
+		Owner: Neutral
+		Location: 68,54
+	Actor11: wormspawner
+		Owner: Neutral
+		Location: 76,78
+	Actor12: wormspawner
+		Owner: Neutral
+		Location: 54,77
+	Actor13: wormspawner
+		Owner: Neutral
+		Location: 49,86
+	Actor14: wormspawner
+		Owner: Neutral
+		Location: 55,45
+	Actor15: wormspawner
+		Owner: Neutral
+		Location: 80,54
+	Actor16: conyard.dune2
+		Owner: Neutral
+		Location: 62,63
+	Actor17: wall.dune2
+		Owner: Neutral
+		Location: 64,68
+	Actor18: wall.dune2
+		Owner: Neutral
+		Location: 63,68
+	Actor19: wall.dune2
+		Owner: Neutral
+		Location: 63,67
+	Actor20: wall.dune2
+		Owner: Neutral
+		Location: 63,66
+	Actor21: wall.dune2
+		Owner: Neutral
+		Location: 64,66
+	Actor22: wall.dune2
+		Owner: Neutral
+		Location: 64,62
+	Actor23: wall.dune2
+		Owner: Neutral
+		Location: 61,62
+	Actor24: wall.dune2
+		Owner: Neutral
+		Location: 59,62
+	Actor25: wall.dune2
+		Owner: Neutral
+		Location: 60,62
+	Actor26: wall.dune2
+		Owner: Neutral
+		Location: 62,62
+	Actor27: wall.dune2
+		Owner: Neutral
+		Location: 62,62
+	Actor28: wall.dune2
+		Owner: Neutral
+		Location: 63,62
+	Actor29: wall.dune2
+		Owner: Neutral
+		Location: 65,66
+	Actor30: wall.dune2
+		Owner: Neutral
+		Location: 65,67
+	Actor31: wall.dune2
+		Owner: Neutral
+		Location: 65,68
+	Actor32: wall.dune2
+		Owner: Neutral
+		Location: 58,62
+	Actor33: wall.dune2
+		Owner: Neutral
+		Location: 57,62
+	Actor34: wall.dune2
+		Owner: Neutral
+		Location: 56,62
+	Actor35: wall.dune2
+		Owner: Neutral
+		Location: 55,62
+	Actor36: wall.dune2
+		Owner: Neutral
+		Location: 54,62
+	Actor37: wall.dune2
+		Owner: Neutral
+		Location: 53,62
+	Actor38: wall.dune2
+		Owner: Neutral
+		Location: 52,62
+	Actor39: wall.dune2
+		Owner: Neutral
+		Location: 52,61
+	Actor40: wall.dune2
+		Owner: Neutral
+		Location: 52,60
+	Actor41: wall.dune2
+		Owner: Neutral
+		Location: 52,59
+	Actor42: wall.dune2
+		Owner: Neutral
+		Location: 52,58
+	Actor43: wall.dune2
+		Owner: Neutral
+		Location: 52,57
+	Actor44: wall.dune2
+		Owner: Neutral
+		Location: 52,56
+	Actor45: wall.dune2
+		Owner: Neutral
+		Location: 52,55
+	Actor46: wall.dune2
+		Owner: Neutral
+		Location: 53,55
+	Actor47: wall.dune2
+		Owner: Neutral
+		Location: 55,55
+	Actor48: wall.dune2
+		Owner: Neutral
+		Location: 54,55
+	Actor49: wall.dune2
+		Owner: Neutral
+		Location: 56,55
+	Actor50: wall.dune2
+		Owner: Neutral
+		Location: 58,55
+	Actor51: wall.dune2
+		Owner: Neutral
+		Location: 58,55
+	Actor52: wall.dune2
+		Owner: Neutral
+		Location: 57,55
+	Actor53: wall.dune2
+		Owner: Neutral
+		Location: 60,55
+	Actor54: wall.dune2
+		Owner: Neutral
+		Location: 59,55
+	Actor55: wall.dune2
+		Owner: Neutral
+		Location: 62,55
+	Actor56: wall.dune2
+		Owner: Neutral
+		Location: 61,55
+	Actor57: wall.dune2
+		Owner: Neutral
+		Location: 63,55
+	Actor58: wall.dune2
+		Owner: Neutral
+		Location: 64,55
+	Actor59: wall.dune2
+		Owner: Neutral
+		Location: 65,55
+	Actor60: wall.dune2
+		Owner: Neutral
+		Location: 66,55
+	Actor61: wall.dune2
+		Owner: Neutral
+		Location: 66,56
+	Actor62: wall.dune2
+		Owner: Neutral
+		Location: 66,57
+	Actor63: wall.dune2
+		Owner: Neutral
+		Location: 66,58
+	Actor64: wall.dune2
+		Owner: Neutral
+		Location: 66,59
+	Actor65: wall.dune2
+		Owner: Neutral
+		Location: 67,59
+	Actor66: wall.dune2
+		Owner: Neutral
+		Location: 68,59
+	Actor67: wall.dune2
+		Owner: Neutral
+		Location: 69,59
+	Actor68: wall.dune2
+		Owner: Neutral
+		Location: 69,60
+	Actor69: wall.dune2
+		Owner: Neutral
+		Location: 69,61
+	Actor70: wall.dune2
+		Owner: Neutral
+		Location: 69,62
+	Actor71: wall.dune2
+		Owner: Neutral
+		Location: 69,63
+	Actor72: wall.dune2
+		Owner: Neutral
+		Location: 69,64
+	Actor73: wall.dune2
+		Owner: Neutral
+		Location: 69,64
+	Actor74: wall.dune2
+		Owner: Neutral
+		Location: 69,65
+	Actor75: wall.dune2
+		Owner: Neutral
+		Location: 69,66
+	Actor76: wall.dune2
+		Owner: Neutral
+		Location: 69,67
+	Actor77: wall.dune2
+		Owner: Neutral
+		Location: 69,67
+	Actor78: wall.dune2
+		Owner: Neutral
+		Location: 70,67
+	Actor79: wall.dune2
+		Owner: Neutral
+		Location: 71,67
+	Actor80: wall.dune2
+		Owner: Neutral
+		Location: 71,69
+	Actor81: wall.dune2
+		Owner: Neutral
+		Location: 71,68
+	Actor82: wall.dune2
+		Owner: Neutral
+		Location: 71,70
+	Actor83: wall.dune2
+		Owner: Neutral
+		Location: 70,70
+	Actor84: wall.dune2
+		Owner: Neutral
+		Location: 69,70
+	Actor85: wall.dune2
+		Owner: Neutral
+		Location: 68,70
+	Actor86: wall.dune2
+		Owner: Neutral
+		Location: 68,69
+	Actor87: wall.dune2
+		Owner: Neutral
+		Location: 68,68
+	Actor88: wall.dune2
+		Owner: Neutral
+		Location: 68,67
+	Actor89: wall.dune2
+		Owner: Neutral
+		Location: 62,72
+	Actor90: wall.dune2
+		Owner: Neutral
+		Location: 63,72
+	Actor91: wall.dune2
+		Owner: Neutral
+		Location: 63,73
+	Actor92: wall.dune2
+		Owner: Neutral
+		Location: 63,74
+	Actor93: wall.dune2
+		Owner: Neutral
+		Location: 63,75
+	Actor94: wall.dune2
+		Owner: Neutral
+		Location: 63,76
+	Actor95: wall.dune2
+		Owner: Neutral
+		Location: 63,77
+	Actor96: wall.dune2
+		Owner: Neutral
+		Location: 63,78
+	Actor97: wall.dune2
+		Owner: Neutral
+		Location: 63,79
+	Actor98: wall.dune2
+		Owner: Neutral
+		Location: 62,79
+	Actor99: wall.dune2
+		Owner: Neutral
+		Location: 61,79
+	Actor100: wall.dune2
+		Owner: Neutral
+		Location: 60,79
+	Actor101: wall.dune2
+		Owner: Neutral
+		Location: 60,78
+	Actor102: wall.dune2
+		Owner: Neutral
+		Location: 60,77
+	Actor103: wall.dune2
+		Owner: Neutral
+		Location: 60,76
+	Actor104: wall.dune2
+		Owner: Neutral
+		Location: 60,74
+	Actor105: wall.dune2
+		Owner: Neutral
+		Location: 60,75
+	Actor106: wall.dune2
+		Owner: Neutral
+		Location: 60,73
+	Actor107: wall.dune2
+		Owner: Neutral
+		Location: 60,72
+	Actor108: wall.dune2
+		Owner: Neutral
+		Location: 61,72
+	Actor109: concrete2.dune2
+		Owner: Neutral
+		Location: 61,60
+	Actor110: concrete2.dune2
+		Owner: Neutral
+		Location: 59,60
+	Actor111: concrete2.dune2
+		Owner: Neutral
+		Location: 57,60
+	Actor112: concrete2.dune2
+		Owner: Neutral
+		Location: 55,60
+	Actor113: concrete2.dune2
+		Owner: Neutral
+		Location: 53,60
+	Actor114: concrete2.dune2
+		Owner: Neutral
+		Location: 53,58
+	Actor115: concrete2.dune2
+		Owner: Neutral
+		Location: 53,55
+	Actor116: concrete2.dune2
+		Owner: Neutral
+		Location: 53,56
+	Actor117: concrete2.dune2
+		Owner: Neutral
+		Location: 54,56
+	Actor118: concrete2.dune2
+		Owner: Neutral
+		Location: 55,56
+	Actor119: concrete2.dune2
+		Owner: Neutral
+		Location: 55,58
+	Actor120: concrete2.dune2
+		Owner: Neutral
+		Location: 57,58
+	Actor121: concrete2.dune2
+		Owner: Neutral
+		Location: 57,56
+	Actor122: concrete2.dune2
+		Owner: Neutral
+		Location: 59,56
+	Actor123: concrete2.dune2
+		Owner: Neutral
+		Location: 61,56
+	Actor124: concrete2.dune2
+		Owner: Neutral
+		Location: 63,56
+	Actor125: concrete2.dune2
+		Owner: Neutral
+		Location: 64,56
+	Actor126: concrete2.dune2
+		Owner: Neutral
+		Location: 64,57
+	Actor127: concrete2.dune2
+		Owner: Neutral
+		Location: 62,57
+	Actor128: concrete2.dune2
+		Owner: Neutral
+		Location: 61,58
+	Actor129: concrete2.dune2
+		Owner: Neutral
+		Location: 59,58
+	Actor130: concrete2.dune2
+		Owner: Neutral
+		Location: 64,60
+	Actor131: concrete2.dune2
+		Owner: Neutral
+		Location: 66,59
+	Actor132: wall.dune2
+		Owner: Neutral
+		Location: 66,58
+	Actor133: harvester.dune2
+		Owner: Neutral
+		Location: 67,73
+		Facing: 92
+	Actor134: sandworm
+		Owner: Neutral
+		Location: 74,73
+		Facing: 92
+	Actor135: sandworm
+		Owner: Neutral
+		Location: 56,74
+		Facing: 92
+	Actor136: sandworm
+		Owner: Neutral
+		Location: 44,66
+		Facing: 92
+	Actor137: sandworm
+		Owner: Neutral
+		Location: 46,57
+		Facing: 92
+	Actor138: sandworm
+		Owner: Neutral
+		Location: 53,49
+		Facing: 92
+	Actor139: sandworm
+		Owner: Neutral
+		Location: 40,49
+		Facing: 92
+	Actor140: sandworm
+		Owner: Neutral
+		Location: 36,68
+		Facing: 92
+	Actor141: sandworm
+		Owner: Neutral
+		Location: 40,81
+		Facing: 92
+	Actor142: sandworm
+		Owner: Neutral
+		Location: 46,83
+		Facing: 92
+	Actor143: sandworm
+		Owner: Neutral
+		Location: 81,85
+		Facing: 92
+	Actor144: sandworm
+		Owner: Neutral
+		Location: 72,56
+		Facing: 92
+	Actor145: sandworm
+		Owner: Neutral
+		Location: 72,50
+		Facing: 92
+	Actor146: sandworm
+		Owner: Neutral
+		Location: 64,45
+		Facing: 92
+	Actor147: sandworm
+		Owner: Neutral
+		Location: 79,47
+		Facing: 92
+	Actor148: harvester.dune2
+		Owner: Neutral
+		Location: 68,79
+		Facing: 92
+	Actor149: harvester.dune2
+		Owner: Neutral
+		Location: 68,83
+		Facing: 92
+	Actor150: harvester.dune2
+		Owner: Neutral
+		Location: 68,76
+		Facing: 92
+	Actor151: refinery.dune2
+		Owner: Neutral
+		Location: 53,59
+	Actor152: refinery.dune2
+		Owner: Neutral
+		Location: 57,59
+	Actor153: refinery.dune2
+		Owner: Neutral
+		Location: 61,59
+	Actor154: refinery.dune2
+		Owner: Neutral
+		Location: 61,56
+	Actor155: refinery.dune2
+		Owner: Neutral
+		Location: 57,56
+
+Smudges:
+
+Rules:
+	World:
+		-CrateSpawner:
+		-SpawnMPUnits:
+		-MPStartLocations:
+		ResourceType@Spice:
+			ValuePerUnit: 0
+		WormManager:
+			Minimum: 1
+			Maximum: 1
+		MusicPlaylist:
+			BackgroundMusic: options
+	large_gun_turret:
+		Power:
+			Amount: 100
+
+Sequences:
+
+VoxelSequences:
+
+Weapons:
+
+Voices:
+
+Music:
+
+Notifications:
+
+Translations:

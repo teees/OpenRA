@@ -1,0 +1,39 @@
+radar.dune2:
+	Inherits: ^Dune2.Building
+	RequiresPower:
+	CanPowerDown:
+	#DisabledOverlay:
+	Buildable:
+		#Prerequisites: barracks, ~techlevel.medium
+		Queue: Building
+		BuildPaletteOrder: 50
+	Selectable:
+		Bounds: 32,32
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Radar
+		Description: Provides a radar map of the battlefield\n  Requires power to operate
+	Health:
+		HP: 1000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 10c0
+	ProvidesRadar:
+	DetectCloaked:
+		Range: 6
+	RenderDetectionCircle:
+	WithTilesetBody:
+		SkipFrames: 1, 2
+	RenderSprites:
+		Image: radar.dune2
+		PlayerPalette: player
+	WithIdleOverlay@DISH:
+		Sequence: idle-dish
+		PauseOnLowPower: yes
+	WithIdleOverlay@TOP:
+		Sequence: idle-top
+	Power:
+		Amount: -40
+	ProvidesPrerequisite@buildingname:

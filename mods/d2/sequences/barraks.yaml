@@ -1,0 +1,25 @@
+barraks.dune2:
+	idle: ICON.MAP
+		Start: 250
+		Offset: 0,0
+	damaged-idle: ICON.MAP
+		Start: 250
+		Length: 1
+		Offset: 0,0
+	idle-top: ICON.MAP
+		Start: 250
+		Length: 2
+		Offset: 0,0
+		Tick: 1000
+	make: ICON.MAP
+		Start: 248
+		Length: 1
+		Offset: 0,0
+	crumble-overlay: ICON.MAP
+		Start: 249
+		Length: 1
+		Offset: 0,0
+		Tick: 200
+	icon: SHAPES.SHP
+		Start: 62
+		Offset: 0,0
