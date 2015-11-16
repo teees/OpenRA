@@ -126,4 +126,10 @@ namespace OpenRA.Mods.Common.Traits
 	{
 		bool PreventsAutoTarget(Actor self, Actor attacker);
 	}
+
+	interface IWallConnector
+	{
+		bool AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType);
+		void SetDirty();
+	}
 }
