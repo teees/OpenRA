@@ -37,7 +37,7 @@ harvester:
 		Actor: harvester.husk
 	WithHarvestOverlay:
 		Palette: effect50alpha
-	#WithDockingAnimation:
+	WithDockingAnimation:
 	AttractsWorms:
 		Intensity: 700
 	SelectionDecorations:

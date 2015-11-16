@@ -22,10 +22,10 @@ refinery:
 		Type: building
 	RevealsShroud:
 		Range: 4c768
-#	Refinery:
-#		DockAngle: 160
-#		DockOffset: 2,1
-#		TickRate: 20
+	Refinery:
+		DockAngle: 180
+		DockOffset: 2,1
+		TickRate: 20
 	StoresResources:
 		PipColor: green
 		PipCount: 10
@@ -37,6 +37,7 @@ refinery:
 		DeliveryOffset: 2,1
 		DeliveringActor: carryall.reinforce
 		Facing: 180
+	WithSpriteBody:
 	WithTilesetBody:
 		SkipFrames: 1,2,5
 	RenderSprites:
