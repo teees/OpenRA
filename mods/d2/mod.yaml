@@ -67,6 +67,7 @@ Rules:
 Sequences:
 	./mods/d2/sequences/aircraft.yaml
 	./mods/d2/sequences/misc.yaml
+	./mods/d2/sequences/spice.yaml
 	./mods/d2/sequences/shroud.yaml
 	./mods/d2/sequences/sandworm.yaml
 	./mods/d2/sequences/concrete.yaml

@@ -42,10 +42,10 @@ namespace OpenRA.Mods.D2.Traits
 
 		public static readonly Dictionary<string, int[]> Variants = new Dictionary<string, int[]>()
 		{
-			{ "cleara", new[] { 0, 50 } },
+			{ "cleara", new[] { 1, 51 } },
 			{ "clearb", new[] { 1, 51 } },
-			{ "clearc", new[] { 43, 52 } },
-			{ "cleard", new[] { 0, 53 } },
+			{ "clearc", new[] { 1, 51 } },
+			{ "cleard", new[] { 1, 51 } },
 		};
 
 		public static readonly Dictionary<ClearSides, int> SpriteMap = new Dictionary<ClearSides, int>()

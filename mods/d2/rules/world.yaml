@@ -37,7 +37,7 @@
 		Selectable: false
 	ResourceType@Spice:
 		ResourceType: 1
-		Palette: d2k
+		Palette: dune2
 		TerrainType: Spice
 		Variants: spice
 		MaxDensity: 20
