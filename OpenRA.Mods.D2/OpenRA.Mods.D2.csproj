@@ -80,6 +80,8 @@
     <Compile Include="Graphics\D2SpriteSequence.cs" />
     <Compile Include="SpriteLoaders\IcnD2Loader.cs" />
     <Compile Include="Traits\Render\WithSpriteTileset.cs" />
+    <Compile Include="Traits\World\D2ResourceLayer.cs" />
+    <Compile Include="Traits\World\D2EditorResourceLayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -23,7 +23,7 @@ refinery:
 	RevealsShroud:
 		Range: 4c768
 	Refinery:
-		DockAngle: 180
+		DockAngle: 120
 		DockOffset: 2,1
 		TickRate: 20
 	StoresResources:
@@ -36,7 +36,7 @@ refinery:
 		Actor: harvester
 		DeliveryOffset: 2,1
 		DeliveringActor: carryall.reinforce
-		Facing: 180
+		Facing: 120
 	WithSpriteBody:
 	WithTilesetBody:
 		SkipFrames: 1,2,5

@@ -70,7 +70,7 @@ World:
 	PathfinderDebugOverlay:
 	WarheadDebugOverlay:
 	BuildableTerrainLayer:
-	D2kResourceLayer:
+	D2ResourceLayer:
 	ResourceClaimLayer:
 	SmudgeLayer@Rock:
 		Type: RockCrater
@@ -147,4 +147,4 @@ World:
 EditorWorld:
 	Inherits: ^BaseWorld
 	EditorActorLayer:
-	D2kEditorResourceLayer:
+	D2EditorResourceLayer:

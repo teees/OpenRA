@@ -41,4 +41,4 @@ harvester:
 	AttractsWorms:
 		Intensity: 700
 	SelectionDecorations:
-		VisualBounds: 16,16
+		VisualBounds: 24,24

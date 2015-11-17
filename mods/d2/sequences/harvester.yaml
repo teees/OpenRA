@@ -10,18 +10,55 @@ harvester:
 				FlipX: true
 		Frames: 0, 1, 2, 3, 4, 7, 6, 5
 		Facings: -8
-	harvest: DATA.R8
-		Start: 3631
-		Length: 6
+
+	harvest:
+		Combine:
+			UNITS1.SHP:
+				Start: 72
+				Length: 3
+				Offset: 0,7
+			UNITS1.SHP:
+				Start: 75
+				Length: 3
+				Offset: -8,6
+			UNITS1.SHP:
+				Start: 78
+				Length: 3
+				Offset: -15,1
+			UNITS1.SHP:
+				Start: 81
+				Length: 3
+				Offset: -9,-6
+			UNITS1.SHP:
+				Start: 84
+				Length: 3
+				Offset: 0,-8
+			UNITS1.SHP:
+				Start: 81
+				Length: 3
+				FlipX: true
+				Offset: 9,-6
+			UNITS1.SHP:
+				Start: 78
+				Length: 3
+				FlipX: true
+				Offset: 15,1
+			UNITS1.SHP:
+				Start: 75
+				Length: 3
+				FlipX: true
+				Offset: 8,7
+		Length: 3
 		Facings: -8
-		Tick: 80
+		Tick: 160
 		ZOffset: 1
-		BlendMode: Multiply
-	dock: DATA.R8
-		Start: 3370
-		Length: 10
-	dock-loop: DATA.R8
-		Start: 3380
+		BlendMode: None
+	dock: UNITS.SHP
+		Start: 14
+		Offset: 0,-8
+	dock-loop: UNITS.SHP
+		Start: 14
+		Offset: 0,-8
 	icon: SHAPES.SHP
 		Start: 86
 		Offset: 0,0
