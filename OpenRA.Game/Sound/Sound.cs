@@ -58,6 +58,10 @@ namespace OpenRA
 				using (var s = GlobalFileSystem.Open(filename))
 					return LoadWave(new WavLoader(s));
 
+			if (filename.ToLowerInvariant().EndsWith("voc"))
+				using (var s = GlobalFileSystem.Open(filename))
+					return LoadVoc(new VocLoader(s));
+
 			using (var s = GlobalFileSystem.Open(filename))
 				return LoadSoundRaw(AudLoader.LoadSound(s), 1, 16, 22050);
 		}
@@ -65,6 +69,11 @@ namespace OpenRA
 		ISoundSource LoadWave(WavLoader wave)
 		{
 			return soundEngine.AddSoundSourceFromMemory(wave.RawOutput, wave.Channels, wave.BitsPerSample, wave.SampleRate);
+		}
+
+		ISoundSource LoadVoc(VocLoader voc)
+		{
+			return soundEngine.AddSoundSourceFromMemory(voc.ReadAllBytes(), voc.Channels, voc.BitsPerSample, voc.SampleRate);
 		}
 
 		ISoundSource LoadSoundRaw(byte[] rawData, int channels, int sampleBits, int sampleRate)

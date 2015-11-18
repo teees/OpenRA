@@ -31,7 +31,7 @@ mcv:
 		Facing: 16
 		IntoActor: conyard
 		Offset: -1,-1
-		TransformSounds: BUILD1.WAV
+		TransformSounds: AFFRIM.VOC
 		NoTransformNotification: CannotDeploy
 	SpawnActorOnDeath:
 		Actor: mcv.husk

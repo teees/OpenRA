@@ -34,6 +34,10 @@ MapFolders:
 Packages:
 	SOUND.RS
 	DUNE.PAK
+	VOC.PAK
+	ATRE.PAK
+	HARK.PAK
+	ORDOS.PAK
 
 Rules:
 	./mods/d2/rules/palettes.yaml
@@ -150,10 +154,10 @@ Weapons:
 	./mods/d2k/weapons/debris.yaml
 
 Voices:
-	./mods/d2k/audio/voices.yaml
+	./mods/d2/audio/voices.yaml
 
 Notifications:
-	./mods/d2k/audio/notifications.yaml
+	./mods/d2/audio/notifications.yaml
 
 Music:
 	./mods/d2k/audio/music.yaml
@@ -188,7 +192,7 @@ ServerTraits:
 	ColorValidator
 
 LobbyDefaults:
-	AllowCheats: false
+	AllowCheats: true
 	Crates: true
 	StartingUnitsClass: none
 	FragileAlliances: false

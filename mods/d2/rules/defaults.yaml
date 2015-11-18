@@ -117,7 +117,7 @@
 	HiddenUnderFog:
 	ActorLostNotification:
 	Crushable:
-		CrushSound: CRUSH1.WAV
+		CrushSound: SQUISH2.VOC
 	Guard:
 		Voice: Guard
 	Guardable:
