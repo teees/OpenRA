@@ -83,9 +83,10 @@ namespace OpenRA.Mods.Common.Traits
 			UpdateNeighbours(self);
 		}
 
-		bool IWallConnector.AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType)
+		bool IWallConnector.AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType, out CVec facing)
 		{
-			return wallType == gateInfo.Type && gateInfo.WallConnections.Contains(wallLocation - self.Location);
+			facing = wallLocation - self.Location;
+			return wallType == gateInfo.Type && gateInfo.WallConnections.Contains(facing);
 		}
 
 		void IWallConnector.SetDirty() { }

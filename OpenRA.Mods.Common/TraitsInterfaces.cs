@@ -129,7 +129,7 @@ namespace OpenRA.Mods.Common.Traits
 
 	interface IWallConnector
 	{
-		bool AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType);
+		bool AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType, out CVec facing);
 		void SetDirty();
 	}
 }
