@@ -22,19 +22,26 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("Animation to play when the actor is created.")]
 		[SequenceReference] public readonly string StartSequence = null;
 
-		[Desc("Sequence name to use")]
+		[Desc("Sequence name to use.")]
 		[SequenceReference] public readonly string Sequence = "idle-overlay";
 
-		[Desc("Position relative to body")]
+		[Desc("Position relative to body.")]
 		public readonly WVec Offset = WVec.Zero;
 
-		[Desc("Custom palette name")]
+		[Desc("Custom palette name.")]
 		[PaletteReference("IsPlayerPalette")] public readonly string Palette = null;
 
-		[Desc("Custom palette is a player palette BaseName")]
+		[Desc("Custom palette is a player palette BaseName.")]
 		public readonly bool IsPlayerPalette = false;
 
+		[Desc("Pause animation when player has insufficient power.")]
 		public readonly bool PauseOnLowPower = false;
+
+		public readonly int MinRandomWaitTicks = 30;
+		public readonly int MaxRandomWaitTicks = 110;
+
+		[Desc("Wait random amount of time between MinRandomWaitTicks and MaxRandomWaitTicks until looping animation.")]
+		public readonly bool RandomizeIntervall = false;
 
 		public override object Create(ActorInitializer init) { return new WithIdleOverlay(init.Self, this); }
 
@@ -57,14 +64,17 @@ namespace OpenRA.Mods.Common.Traits
 		}
 	}
 
-	public class WithIdleOverlay : UpgradableTrait<WithIdleOverlayInfo>, INotifyDamageStateChanged, INotifyBuildComplete, INotifySold, INotifyTransform
+	public class WithIdleOverlay : UpgradableTrait<WithIdleOverlayInfo>, INotifyDamageStateChanged, INotifyBuildComplete, INotifySold, INotifyTransform, ITick
 	{
 		readonly Animation overlay;
+		readonly WithIdleOverlayInfo info;
 		bool buildComplete;
+		int randomDelay;
 
 		public WithIdleOverlay(Actor self, WithIdleOverlayInfo info)
 			: base(info)
 		{
+			this.info = info;
 			var rs = self.Trait<RenderSprites>();
 			var body = self.Trait<BodyOrientation>();
 
@@ -74,8 +84,10 @@ namespace OpenRA.Mods.Common.Traits
 			if (info.StartSequence != null)
 				overlay.PlayThen(RenderSprites.NormalizeSequence(overlay, self.GetDamageState(), info.StartSequence),
 					() => overlay.PlayRepeating(RenderSprites.NormalizeSequence(overlay, self.GetDamageState(), info.Sequence)));
-			else
+			else if (!info.RandomizeIntervall)
 				overlay.PlayRepeating(RenderSprites.NormalizeSequence(overlay, self.GetDamageState(), info.Sequence));
+			else
+				LoopAnimation(self);
 
 			var anim = new AnimationWithOffset(overlay,
 				() => body.LocalToWorld(info.Offset.Rotate(body.QuantizeOrientation(self, self.Orientation))),
@@ -107,6 +119,24 @@ namespace OpenRA.Mods.Common.Traits
 		public void DamageStateChanged(Actor self, AttackInfo e)
 		{
 			overlay.ReplaceAnim(RenderSprites.NormalizeSequence(overlay, e.DamageState, overlay.CurrentSequence.Name));
+		}
+
+		void LoopAnimation(Actor self)
+		{
+			overlay.PlayThen(RenderSprites.NormalizeSequence(overlay, self.GetDamageState(), info.Sequence),
+				() => randomDelay = self.World.SharedRandom.Next(Info.MinRandomWaitTicks, Info.MaxRandomWaitTicks));
+		}
+
+		void ITick.Tick(Actor self)
+		{
+			if (info.RandomizeIntervall)
+			{
+				if (randomDelay >= 0)
+					randomDelay--;
+
+				if (randomDelay == 0)
+					LoopAnimation(self);
+			}
 		}
 	}
 }

@@ -346,6 +346,7 @@ icon:
 	clustermissile: mltiicon
 	ioncannon: ioncicon
 	hunterseeker: detnicon
+	firestorm: fstdicon
 
 clustermissile:
 	up: null # TODO

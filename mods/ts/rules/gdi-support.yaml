@@ -59,6 +59,138 @@ GAGATE_B:
 	LineBuildNode:
 		Connections: 0,-1, 0,1
 
+GAFSDF:
+	Inherits: ^Wall
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 20
+		Prerequisites: gafire, ~structures.gdi
+	-Building:
+	EnergyWall:
+		Dimensions: 1,1
+		Footprint: x
+		BuildSounds: place2.aud
+		Adjacent: 7
+		TerrainTypes: Clear, Rough, Road, DirtRoad, Green, Sand, Pavement
+		KillsAir: true
+	SoundOnDamageTransition:
+		DamagedSounds:
+		DestroyedSounds:
+	Valued:
+		Cost: 50
+	CustomSellValue:
+		Value: 0
+	Tooltip:
+		Name: Firestorm Wall Section
+		Description: Stops infantry and blocks enemy fire.\nCan NOT be crushed by tanks.
+	Health:
+		HP: 200
+	Armor:
+		Type: Concrete
+	BlocksProjectiles:
+		Height: 640
+	RequiresPower:
+		PoweredUpgrades: powered
+	Power:
+		Amount: -2
+	RevealsShroud:
+		Range: 2c0
+	-Crushable:
+	LineBuild:
+		NodeTypes: energywall, turret
+	LineBuildNode:
+		Types: energywall
+	-WithWallSpriteBody:
+	WithWallSpriteBody@disabled:
+		Type: energywall
+		UpgradeTypes: powered # firestorm
+		UpgradeMaxEnabledLevel: 0
+	WithWallSpriteBody@enabled:
+		NodeUpgrades: isnode
+		Type: energywall
+		Sequence: enabled
+		UpgradeTypes: powered # firestorm
+		UpgradeMinEnabledLevel: 1
+	WithIdleOverlay@FLASH:
+		Type: energywall
+		Sequence: flash
+		UpgradeTypes: isnode
+		UpgradeMinEnabledLevel: 1
+	WithIdleOverlay@BURST:
+		Type: energywall
+		Sequence: burst
+		Palette: effect
+		IsPlayerPalette: false
+		UpgradeTypes: isnode
+		UpgradeMinEnabledLevel: 1
+		RandomizeIntervall: true
+		MinRandomWaitTicks: 60
+		MaxRandomWaitTicks: 120
+	DamageMultiplier@enabled:
+		Modifier: 0
+		UpgradeTypes: powered # firestorm
+		UpgradeMinEnabledLevel: 1
+	-BlocksProjectiles:
+	BlocksProjectiles@enabled:
+		Height: 9999
+		UpgradeTypes: powered # firestorm
+		UpgradeMinEnabledLevel: 1
+
+GAFIRE:
+	Inherits: ^Building
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Fire Storm Generator
+		Description: Stops infantry and blocks enemy fire.\nCan NOT be crushed by tanks.
+	Buildable:
+		BuildPaletteOrder: 80
+		Prerequisites: gatech, ~structures.gdi
+		Queue: Building
+	Building:
+		Footprint: xxx xxx
+		Dimensions: 3,2
+	Health:
+		HP: 600
+	Armor:
+		Type: Heavy
+	RequiresPower:
+		PoweredUpgrades: powered
+	WithIdleOverlay@idle-light:
+		Sequence: idle-light
+		UpgradeTypes: powered
+		UpgradeMinEnabledLevel: 1
+	WithIdleOverlay@generator:
+		Sequence: idle-generator
+		UpgradeTypes: powered
+		UpgradeMinEnabledLevel: 1
+	WithIdleOverlay@poweroutage:
+		Sequence: poweroutage
+		UpgradeTypes: powered
+		UpgradeMaxEnabledLevel: 0
+	RevealsShroud:
+		Range: 5c0
+	Power:
+		Amount: -200
+	CanPowerDown:
+		IndicatorPalette: mouse
+	Selectable:
+		Bounds: 106, 48, 8, -6
+	SelectionDecorations:
+		VisualBounds: 106, 60, 8, -15
+	ProvidesPrerequisite@buildingname:
+	FirestormPower:
+		Icon: firestorm
+		ChargeTime: 10
+		Description: Firestorm defense
+		LongDesc: Enables firestorm defense
+		BeginChargeSound:
+		EndChargeSound:
+		SelectTargetSound:
+		InsufficientPowerSound:
+		IncomingSound:
+		LaunchSound:
+
 GACTWR:
 	Inherits: ^Defense
 	-WithSpriteBody:

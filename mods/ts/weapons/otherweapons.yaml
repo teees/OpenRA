@@ -67,3 +67,11 @@ Tiberium:
 		Damage: 2
 		DamageTypes: EnergyDeath # TODO: FIX ME!
 
+Firestorm:
+	ReloadDelay: 16
+	ValidTargets: Ground, Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Ground, Air
+		Spread: 0
+		Damage: 9999
+		DamageTypes: FireDeath
