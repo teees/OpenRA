@@ -9,29 +9,58 @@
  */
 #endregion
 
+using System;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.Common.Traits
 {
 	[Desc("Needs power to operate.")]
-	class RequiresPowerInfo : UpgradableTraitInfo, ITraitInfo
+	class RequiresPowerInfo : UpgradableTraitInfo, ITraitInfo, Requires<UpgradeManagerInfo>
 	{
+		[UpgradeGrantedReference]
+		[Desc("The upgrades to grant while the actor is powered.")]
+		public readonly string[] PoweredUpgrades = { };
+
 		public override object Create(ActorInitializer init) { return new RequiresPower(init.Self, this); }
 	}
 
-	class RequiresPower : UpgradableTrait<RequiresPowerInfo>, IDisable, INotifyOwnerChanged
+	class RequiresPower : UpgradableTrait<RequiresPowerInfo>, IDisable, ITick, INotifyOwnerChanged, INotifyAddedToWorld
 	{
+		readonly RequiresPowerInfo info;
 		PowerManager playerPower;
+		UpgradeManager manager;
+		bool wasDisabled = true;
 
 		public RequiresPower(Actor self, RequiresPowerInfo info)
 			: base(info)
 		{
+			this.info = info;
 			playerPower = self.Owner.PlayerActor.Trait<PowerManager>();
 		}
 
 		public bool Disabled
 		{
 			get { return playerPower.PowerProvided < playerPower.PowerDrained && !IsTraitDisabled; }
+		}
+
+		void INotifyAddedToWorld.AddedToWorld(Actor self)
+		{
+			manager = self.Trait<UpgradeManager>();
+		}
+
+		void ITick.Tick(Actor self)
+		{
+			if (manager == null)
+				return;
+
+			var isDisabled = Disabled;
+			if (wasDisabled && !isDisabled)
+				foreach (var up in info.PoweredUpgrades)
+					manager.GrantUpgrade(self, up, this);
+			else if (!wasDisabled && isDisabled)
+				foreach (var up in info.PoweredUpgrades)
+					manager.RevokeUpgrade(self, up, this);
+			wasDisabled = isDisabled;
 		}
 
 		public void OnOwnerChanged(Actor self, Player oldOwner, Player newOwner)

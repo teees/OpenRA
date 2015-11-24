@@ -78,6 +78,8 @@
     <Compile Include="Traits\World\TSShroudPalette.cs" />
     <Compile Include="UtilityCommands\ImportTSMapCommand.cs" />
     <Compile Include="Traits\KilledByEnergyWall.cs" />
+    <Compile Include="Traits\Buildings\EnergyWall.cs" />
+    <Compile Include="Traits\SupportPowers\FirestormPower.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -91,4 +93,7 @@
 copy "$(TargetPath)" "$(SolutionDir)mods/ts/"
 cd "$(SolutionDir)"</PostBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Traits\SupportPowers\" />
+  </ItemGroup>
 </Project>

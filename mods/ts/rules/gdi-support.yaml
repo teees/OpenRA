@@ -43,6 +43,162 @@ GAGATE_B:
 	Tooltip:
 		Name: GDI Gate
 
+GAFSDF:
+	Inherits@1: ^Wall
+	Inherits@2: ^EmpDisable
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 20
+		Prerequisites: gafire, ~structures.gdi
+	Building:
+		Footprint: x
+	EnergyWall:
+		KillsAir: true
+		UpgradeTypes: firestorm, powered
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	SoundOnDamageTransition:
+		DamagedSounds:
+		DestroyedSounds:
+	Valued:
+		Cost: 50
+	CustomSellValue:
+		Value: 0
+	Tooltip:
+		Name: Firestorm Wall Section
+		Description: Stops everything when enabled. Kills air units.
+	Health:
+		HP: 200
+	Armor:
+		Type: Concrete
+	BlocksProjectiles:
+		Height: 640
+	RequiresPower:
+		PoweredUpgrades: powered
+	Power:
+		Amount: -2
+	RevealsShroud:
+		Range: 2c0
+	-Crushable:
+	LineBuild:
+		NodeTypes: energywall, turret
+	LineBuildNode:
+		Types: energywall
+	-WithWallSpriteBody:
+	WithWallSpriteBody@disabled:
+		Type: energywall
+		UpgradeTypes: firestorm, powered
+		UpgradeMaxEnabledLevel: 1
+		UpgradeMaxAcceptedLevel: 2
+	WithWallSpriteBody@enabled:
+		NodeUpgrades: isnode
+		Type: energywall
+		Sequence: enabled
+		UpgradeTypes: firestorm, powered
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	WithIdleOverlay@FLASH:
+		Type: energywall
+		Sequence: flash
+		UpgradeTypes: isnode
+		UpgradeMinEnabledLevel: 1
+	WithIdleOverlay@BURST:
+		Type: energywall
+		Sequence: burst
+		Palette: effect
+		IsPlayerPalette: false
+		UpgradeTypes: isnode
+		UpgradeMinEnabledLevel: 1
+		RandomizeIntervall: true
+		MinRandomWaitTicks: 60
+		MaxRandomWaitTicks: 120
+	DamageMultiplier@enabled:
+		Modifier: 0
+		UpgradeTypes: firestorm, powered
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	-BlocksProjectiles:
+	BlocksProjectiles@enabled:
+		Height: 9999
+		UpgradeTypes: firestorm, powered
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	GlobalUpgradable:
+		Upgrades: firestorm
+		Prerequisites: firestorm
+
+GAFIRE:
+	Inherits: ^Building
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Fire Storm Generator
+		Description: Stops infantry and blocks enemy fire.\nCan NOT be crushed by tanks.
+	Buildable:
+		BuildPaletteOrder: 80
+		Prerequisites: gatech, ~structures.gdi
+		Queue: Building
+	Building:
+		Footprint: xxx xxx
+		Dimensions: 3,2
+	Health:
+		HP: 600
+	Armor:
+		Type: Heavy
+	RequiresPower:
+		PoweredUpgrades: powered
+	WithIdleOverlay@idle-light:
+		Sequence: idle-light
+		UpgradeTypes: powered, firestorm
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	WithIdleOverlay@generator:
+		Sequence: idle-generator
+		UpgradeTypes: powered, firestorm
+		UpgradeMinEnabledLevel: 2
+		UpgradeMaxAcceptedLevel: 2
+	WithIdleOverlay@poweroutage:
+		Sequence: poweroutage
+		UpgradeTypes: powered, firestorm
+		UpgradeMaxEnabledLevel: 1
+		UpgradeMaxAcceptedLevel: 2
+	RevealsShroud:
+		Range: 5c0
+	Power:
+		Amount: -200
+	CanPowerDown:
+		IndicatorPalette: mouse
+	Selectable:
+		Bounds: 106, 48, 8, -6
+	SelectionDecorations:
+		VisualBounds: 106, 60, 8, -15
+	ProvidesPrerequisite@buildingname:
+	FirestormPower:
+		Icon: firestorm
+		ChargeTime: 160
+		EndChargeSound: 00-i162.aud
+		Description: Firestorm defense
+		LongDesc: Enables firestorm defense
+		LifeTime: 500
+		Actor: firestormdummy
+	GlobalUpgradable:
+		Upgrades: firestorm
+		Prerequisites: firestorm
+
+FIRESTORMDUMMY:
+	AlwaysVisible:
+	Immobile:
+		OccupiesSpace: false
+	Health:
+		HP: 1000
+	BodyOrientation:
+		QuantizedFacings: 1
+	WithSpriteBody:
+	RenderSpritesEditorOnly:
+		Image: camera
+	ProvidesPrerequisite:
+		Prerequisite: firestorm
+		
 GACTWR:
 	Inherits: ^Defense
 	-WithSpriteBody:

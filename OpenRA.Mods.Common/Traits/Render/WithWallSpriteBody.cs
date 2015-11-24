@@ -25,9 +25,13 @@ namespace OpenRA.Mods.Common.Traits.Render
 	}
 
 	[Desc("Render trait for actors that change sprites if neighbors with the same trait are present.")]
-	class WithWallSpriteBodyInfo : WithSpriteBodyInfo, IWallConnectorInfo, Requires<BuildingInfo>
+	class WithWallSpriteBodyInfo : WithSpriteBodyInfo, IWallConnectorInfo, Requires<BuildingInfo>, Requires<UpgradeManagerInfo>
 	{
 		public readonly string Type = "wall";
+
+		[UpgradeGrantedReference]
+		[Desc("The upgrades to grant Nodes.")]
+		public readonly string[] NodeUpgrades = { };
 
 		public override object Create(ActorInitializer init) { return new WithWallSpriteBody(init, this); }
 
@@ -84,8 +88,10 @@ namespace OpenRA.Mods.Common.Traits.Render
 	class WithWallSpriteBody : WithSpriteBody, INotifyRemovedFromWorld, IWallConnector, ITick
 	{
 		readonly WithWallSpriteBodyInfo wallInfo;
+		readonly UpgradeManager manager;
 		int adjacent = 0;
 		bool dirty = true;
+		bool wasNode = false;
 
 		bool IWallConnector.AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType, out CVec facing)
 		{
@@ -99,6 +105,7 @@ namespace OpenRA.Mods.Common.Traits.Render
 			: base(init, info, () => 0)
 		{
 			wallInfo = info;
+			manager = init.Self.Trait<UpgradeManager>();
 		}
 
 		public override void DamageStateChanged(Actor self, AttackInfo e)
@@ -133,7 +140,33 @@ namespace OpenRA.Mods.Common.Traits.Render
 					adjacent |= 8;
 			}
 
+			var isNode = adjacent != 5 && adjacent != 10;
+			if (!IsTraitDisabled)
+			{
+				if (isNode && !wasNode)
+					foreach (var up in wallInfo.NodeUpgrades)
+						manager.GrantUpgrade(self, up, this);
+				else if (!isNode && wasNode)
+					foreach (var up in wallInfo.NodeUpgrades)
+						manager.RevokeUpgrade(self, up, this);
+			}
+
+			wasNode = isNode;
 			dirty = false;
+		}
+
+		protected override void UpgradeEnabled(Actor self)
+		{
+			if (wasNode)
+				foreach (var up in wallInfo.NodeUpgrades)
+					manager.GrantUpgrade(self, up, this);
+		}
+
+		protected override void UpgradeDisabled(Actor self)
+		{
+			if (wasNode)
+				foreach (var up in wallInfo.NodeUpgrades)
+					manager.RevokeUpgrade(self, up, this);
 		}
 
 		public override void BuildingComplete(Actor self)
