@@ -70,12 +70,11 @@ namespace OpenRA.Mods.Common.Traits
 			var adjacent = OpenRA.Traits.Util.ExpandFootprint(footprint, true).Except(footprint)
 				.Where(self.World.Map.Contains).ToList();
 
-			var adjacentActors = adjacent.SelectMany(c => self.World.ActorMap.GetActorsAt(c))
-				.Select(a => a.TraitOrDefault<IWallConnector>())
-				.Where(a => a != null);
+			var adjacentActorTraits = adjacent.SelectMany(c => self.World.ActorMap.GetActorsAt(c))
+				.SelectMany(a => a.TraitsImplementing<IWallConnector>());
 
-			foreach (var rb in adjacentActors)
-				rb.SetDirty();
+			foreach (var aat in adjacentActorTraits)
+				aat.SetDirty();
 		}
 
 		public void RemovedFromWorld(Actor self)
