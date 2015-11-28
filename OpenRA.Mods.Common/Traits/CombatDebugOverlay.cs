@@ -9,7 +9,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Effects;
 using OpenRA.Mods.Common.Graphics;
@@ -28,14 +30,14 @@ namespace OpenRA.Mods.Common.Traits
 		readonly DeveloperMode devMode;
 
 		readonly HealthInfo healthInfo;
-		readonly BlocksProjectilesInfo blockInfo;
+		readonly IBlocksProjectiles[] blocker;
 		Lazy<AttackBase> attack;
 		Lazy<BodyOrientation> coords;
 
 		public CombatDebugOverlay(Actor self)
 		{
 			healthInfo = self.Info.TraitInfoOrDefault<HealthInfo>();
-			blockInfo = self.Info.TraitInfoOrDefault<BlocksProjectilesInfo>();
+			blocker = self.TraitsImplementing<IBlocksProjectiles>().ToArray();
 			attack = Exts.Lazy(() => self.TraitOrDefault<AttackBase>());
 			coords = Exts.Lazy(() => self.Trait<BodyOrientation>());
 
@@ -54,10 +56,11 @@ namespace OpenRA.Mods.Common.Traits
 
 			var wlr = Game.Renderer.WorldLineRenderer;
 
-			if (blockInfo != null)
+			var block = blocker.Where(Exts.IsTraitEnabled).ToList();
+			if (block.Any())
 			{
 				var hc = Color.Orange;
-				var height = new WVec(0, 0, blockInfo.Height.Length);
+				var height = new WVec(0, 0, block.Max(b => b.GetHeight(self).Length));
 				var ha = wr.ScreenPosition(self.CenterPosition);
 				var hb = wr.ScreenPosition(self.CenterPosition + height);
 				wlr.DrawLine(ha, hb, hc);
