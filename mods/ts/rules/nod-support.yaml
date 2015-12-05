@@ -59,6 +59,86 @@ NAGATE_B:
 	LineBuildNode:
 		Connections: 0,-1, 0,1
 
+NAPOST:
+	Inherits: ^Building
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 1001
+		Prerequisites: naapwr, ~structures.nod
+	SoundOnDamageTransition:
+		DamagedSound:
+		DestroyedSound:
+	Valued:
+		Cost: 200
+	CustomSellValue:
+		Value: 0
+	Tooltip:
+		Name: Laser Fence
+		Description: Laser barrier.
+	Health:
+		HP: 300
+	Armor:
+		Type: Concrete
+	LineBuild:
+		Range: 10
+		NodeTypes: laserfencenode
+		SegmentType: nafnce
+		SanitizeSegments: true
+	LineBuildNode:
+		Types: laserfencenode
+	RequiresPower:
+		PoweredUpgrades: powered
+	Power:
+		Amount: -25
+	RevealsShroud:
+		Range: 4c0
+	WithIdleOverlay@LIGHTS:
+		Sequence: lights
+		PauseOnLowPower: yes
+	WithIdleOverlay@CHAINOFLIGHTS:
+		Sequence: chainoflights
+		PauseOnLowPower: yes
+
+NAFNCE:
+	Inherits: ^Wall
+	-Building:
+	EnergyWall:
+		Dimensions: 1,1
+		Footprint: x
+		BuildSounds: place2.aud
+		Adjacent: 7
+		TerrainTypes: Clear, Rough, Road, DirtRoad, Green, Sand, Pavement
+	Valued:
+		Cost: 50
+	CustomSellValue:
+		Value: 0
+	Tooltip:
+		Name: Laser Fence
+		Description: Laser barrier.
+	RequiresPower:
+		PoweredUpgrades: powered
+	LineBuild:
+		NodeTypes: laserfence
+	LineBuildNode:
+		Types: laserfence
+	-Crushable:
+	-WithWallSpriteBody:
+	WithWallSpriteBody@disabled:
+		Type: laserfence
+		UpgradeTypes: powered
+		UpgradeMaxEnabledLevel: 0
+		FixedOrientation: true
+	WithWallSpriteBody@enabled:
+		Type: laserfence
+		Sequence: enabled
+		UpgradeTypes: powered
+		UpgradeMinEnabledLevel: 1
+		FixedOrientation: true
+	BlocksProjectiles@enabled:
+		Height: 640
+		UpgradeTypes: powered
+		UpgradeMinEnabledLevel: 1
+
 NALASR:
 	Inherits: ^Defense
 	Valued:

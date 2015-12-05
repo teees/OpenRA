@@ -26,6 +26,8 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("The upgrades to grant Nodes.")]
 		public readonly string[] NodeUpgrades = { };
 
+		public bool FixedOrientation = false;	
+
 		public override object Create(ActorInitializer init) { return new WithWallSpriteBody(init, this); }
 
 		public override IEnumerable<IActorPreview> RenderPreviewSprites(ActorPreviewInitializer init, RenderSpritesInfo rs, string image, int facings, PaletteReference p)
@@ -75,16 +77,27 @@ namespace OpenRA.Mods.Common.Traits
 
 	class WithWallSpriteBody : WithSpriteBody, INotifyRemovedFromWorld, IWallConnector, ITick
 	{
+		enum WallOrientation
+		{
+			Undefined,
+			X,
+			Y
+		}
+
 		readonly WithWallSpriteBodyInfo wallInfo;
 		readonly UpgradeManager manager;
 		int adjacent = 0;
 		bool dirty = true;
 		bool wasNode = false;
+		WallOrientation wallOrientation = WallOrientation.Undefined;
 
 		bool IWallConnector.AdjacentWallCanConnect(Actor self, CPos wallLocation, string wallType, out CVec facing)
 		{
 			facing = wallLocation - self.Location;
-			return wallInfo.Type == wallType && Math.Abs(facing.X) + Math.Abs(facing.Y) == 1;
+			var matchingOrientation = !wallInfo.FixedOrientation || wallOrientation == WallOrientation.Undefined ||
+				wallOrientation == WallOrientation.X && facing.X != 0 ||
+				wallOrientation == WallOrientation.Y && facing.Y != 0;
+			return wallInfo.Type == wallType && matchingOrientation && Math.Abs(facing.X) + Math.Abs(facing.Y) == 1;
 		}
 
 		void IWallConnector.SetDirty() { dirty = true; }
@@ -117,6 +130,15 @@ namespace OpenRA.Mods.Common.Traits
 				var wc = a.TraitsImplementing<IWallConnector>().FirstOrDefault(Exts.IsTraitEnabled);
 				if (wc == null || !wc.AdjacentWallCanConnect(a, self.Location, wallInfo.Type, out facing))
 					continue;
+
+				if (wallInfo.FixedOrientation)
+				{
+					if (wallOrientation == WallOrientation.Undefined)
+						wallOrientation = facing.X != 0 ? WallOrientation.X : WallOrientation.Y;
+					if (wallOrientation == WallOrientation.X && facing.Y != 0 
+						|| wallOrientation == WallOrientation.Y && facing.X != 0)
+						continue;
+				}
 
 				if (facing.Y > 0)
 					adjacent |= 1;
