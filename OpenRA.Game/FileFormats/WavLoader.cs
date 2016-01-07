@@ -15,133 +15,140 @@ namespace OpenRA.FileFormats
 {
 	public class WavLoader : ISoundLoader
 	{
-		public int FileSize;
-		public string Format;
-
-		public int FmtChunkSize;
-		public int AudioFormat;
-		public int Channels;
-		public int SampleRate;
-		public int ByteRate;
-		public int BlockAlign;
-		public int BitsPerSample;
-
-		public int UncompressedSize;
-		public int DataSize;
-		public byte[] RawOutput;
-
-		public enum WaveType { Pcm = 0x1, ImaAdpcm = 0x11 }
-		public static WaveType Type { get; private set; }
-
-		public bool CanParse(Stream stream)
+		public bool TryParseSound(Stream stream, out ISoundFormat sound)
 		{
-			var position = stream.Position;
-
-			var type = stream.ReadASCII(4);
-			if (type != "RIFF")
+			try
 			{
-				stream.Position = position;
-				return false;
+				sound = new WavFormat(stream);
+				return true;
+			}
+			catch
+			{
+				// Not a (supported) WAV
 			}
 
-			/*var fileSize =*/ stream.ReadInt32();
-			var format = stream.ReadASCII(4);
-			if (format != "WAVE")
-			{
-				stream.Position = position;
-				return false;
-			}
+			sound = null;
+			return false;
+		}
+	}
 
-			stream.Position = position;
-			return true;
+	public class WavFormat : ISoundFormat
+	{
+		public int Channels { get; private set; }
+		public int SampleBits { get; private set; }
+		public int SampleRate { get; private set; }
+		public float LengthInSeconds { get { return (float)dataLength / (Channels * SampleRate * SampleBits); } }
+
+		RiffChunk riffWaveChunk;
+
+		WaveType waveType;
+		int blockAlign;
+
+		int uncompressedSize;
+
+		long dataOffset;
+		int dataLength;
+
+		Stream stream;
+
+		public enum WaveType
+		{
+			Pcm = 0x1,
+			ImaAdpcm = 0x11
 		}
 
-		void LoadSound(Stream s)
+		struct RiffChunk
 		{
-			var type = s.ReadASCII(4);
-			FileSize = s.ReadInt32();
-			Format = s.ReadASCII(4);
+			public string ChunkID;
+			public uint ChunkSize;
+			public string RiffType;
 
-			while (s.Position < s.Length)
+			public static RiffChunk Read(Stream s)
 			{
-				if ((s.Position & 1) == 1)
-					s.ReadByte(); // Alignment
+				RiffChunk rc;
+				rc.ChunkID = s.ReadASCII(4);
+				rc.ChunkSize = s.ReadUInt32();
+				rc.RiffType = s.ReadASCII(4);
+				return rc;
+			}
+		}
 
-				type = s.ReadASCII(4);
+		public WavFormat(Stream stream)
+		{
+			this.stream = stream;
+
+			ParseHeader();
+			Preload();
+		}
+
+		void ParseHeader()
+		{
+			riffWaveChunk = RiffChunk.Read(stream);
+			if (riffWaveChunk.ChunkID != "RIFF")
+				throw new InvalidDataException("Unsupported WAV type \"" + riffWaveChunk.ChunkID + "\"");
+			if (riffWaveChunk.RiffType != "WAVE")
+				throw new InvalidDataException("Unsupported WAV format \"" + riffWaveChunk.RiffType + "\"");
+		}
+
+		void Preload()
+		{
+			while (stream.Position < stream.Length)
+			{
+				if ((stream.Position & 1) == 1)
+					stream.ReadByte(); // Alignment
+
+				var type = stream.ReadASCII(4);
+				var chunkSize = stream.ReadInt32();
+				var skip = chunkSize;
 				switch (type)
 				{
 					case "fmt ":
-						FmtChunkSize = s.ReadInt32();
-						AudioFormat = s.ReadInt16();
-						Type = (WaveType)AudioFormat;
+						{
+							waveType = (WaveType)stream.ReadInt16();
 
-						if (Type != WaveType.Pcm && Type != WaveType.ImaAdpcm)
-							throw new NotSupportedException("Compression type is not supported.");
+							if (waveType != WaveType.Pcm && waveType != WaveType.ImaAdpcm)
+								throw new NotSupportedException("Compression type is not supported.");
 
-						Channels = s.ReadInt16();
-						SampleRate = s.ReadInt32();
-						ByteRate = s.ReadInt32();
-						BlockAlign = s.ReadInt16();
-						BitsPerSample = s.ReadInt16();
+							Channels = stream.ReadInt16();
+							SampleRate = stream.ReadInt32();
+							var byteRate = stream.ReadInt32();
+							blockAlign = stream.ReadInt16();
+							SampleBits = stream.ReadInt16();
+							skip = chunkSize - 16;
+							break;
+						}
 
-						s.ReadBytes(FmtChunkSize - 16);
-						break;
 					case "fact":
 						{
-							var chunkSize = s.ReadInt32();
-							UncompressedSize = s.ReadInt32();
-							s.ReadBytes(chunkSize - 4);
+							uncompressedSize = stream.ReadInt32();
+							skip = chunkSize - 4;
+							break;
 						}
 
-						break;
 					case "data":
-						DataSize = s.ReadInt32();
-						RawOutput = s.ReadBytes(DataSize);
-						break;
+						{
+							dataOffset = stream.Position;
+							dataLength = chunkSize;
+							break;
+						}
+
 					default:
 						// Ignore unknown chunks
-						{
-							var chunkSize = s.ReadInt32();
-							s.ReadBytes(chunkSize);
-						}
-
 						break;
 				}
-			}
 
-			if (Type == WaveType.ImaAdpcm)
-			{
-				RawOutput = DecodeImaAdpcmData();
-				BitsPerSample = 16;
+				if (skip > 0)
+					stream.Seek(skip, SeekOrigin.Current);
 			}
 		}
 
-		public float GetLength(Stream s)
+		byte[] DecodeImaAdpcmData(byte[] rawData)
 		{
-			s.Position = 12;
-			var fmt = s.ReadASCII(4);
+			var s = new MemoryStream(rawData);
 
-			if (fmt != "fmt ")
-				return 0;
-
-			s.Position = 22;
-			var channels = s.ReadInt16();
-			var sampleRate = s.ReadInt32();
-
-			s.Position = 34;
-			var bitsPerSample = s.ReadInt16();
-			var length = s.Length * 8;
-
-			return length / (channels * sampleRate * bitsPerSample);
-		}
-
-		public byte[] DecodeImaAdpcmData()
-		{
-			var s = new MemoryStream(RawOutput);
-
-			var numBlocks = DataSize / BlockAlign;
-			var blockDataSize = BlockAlign - (Channels * 4);
-			var outputSize = UncompressedSize * Channels * 2;
+			var numBlocks = dataLength / blockAlign;
+			var blockDataSize = blockAlign - (Channels * 4);
+			var outputSize = uncompressedSize * Channels * 2;
 
 			var outOffset = 0;
 			var output = new byte[outputSize];
@@ -200,36 +207,18 @@ namespace OpenRA.FileFormats
 			return output;
 		}
 
-		public bool TryParseSound(Stream stream, string fileName, out byte[] rawData, out int channels,
-			out int sampleBits, out int sampleRate)
+		public byte[] GetRawData()
 		{
-			rawData = null;
-			channels = sampleBits = sampleRate = 0;
+			stream.Seek(dataOffset, SeekOrigin.Begin);
+			var rawData = stream.ReadBytes(dataLength);
 
-			try
+			if (waveType == WaveType.ImaAdpcm)
 			{
-				if (!CanParse(stream))
-					return false;
-
-				LoadSound(stream);
-			}
-			catch (Exception e)
-			{
-				// CanParse() will check if the stream is in a format that this parser supports.
-				// If not, it will simply return false so we know we can't use it. If it is, it will start
-				// parsing the data without any further failsafes, which means that it will crash on corrupted files
-				// (that end prematurely or otherwise don't conform to the specifications despite the headers being OK).
-				Log.Write("debug", "Failed to parse WAV file {0}. Error message:".F(fileName));
-				Log.Write("debug", e.ToString());
-				return false;
+				rawData = DecodeImaAdpcmData(rawData);
+				SampleBits = 16;
 			}
 
-			rawData = RawOutput;
-			channels = Channels;
-			sampleBits = BitsPerSample;
-			sampleRate = SampleRate;
-
-			return true;
+			return rawData;
 		}
 	}
 }
