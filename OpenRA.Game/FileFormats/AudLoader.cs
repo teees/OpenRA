@@ -13,38 +13,78 @@ using System.IO;
 
 namespace OpenRA.FileFormats
 {
-	[Flags]
-	enum SoundFlags
+	public class AudLoader : ISoundLoader
 	{
-		Stereo = 0x1,
-		_16Bit = 0x2,
-	}
-
-	enum SoundFormat
-	{
-		WestwoodCompressed = 1,
-		ImaAdpcm = 99,
-	}
-
-	struct Chunk
-	{
-		public int CompressedSize;
-		public int OutputSize;
-
-		public static Chunk Read(Stream s)
+		public bool TryParseSound(Stream stream, out ISoundFormat sound)
 		{
-			Chunk c;
-			c.CompressedSize = s.ReadUInt16();
-			c.OutputSize = s.ReadUInt16();
+			try
+			{
+				sound = new AudFormat(stream);
+				return true;
+			}
+			catch
+			{
+				// Not a (supported) AUD
+			}
 
-			if (s.ReadUInt32() != 0xdeaf)
-				throw new InvalidDataException("Chunk header is bogus");
-			return c;
+			sound = null;
+			return false;
 		}
 	}
 
-	public class AudLoader : ISoundLoader
+	public class AudFormat : ISoundFormat
 	{
+		public int Channels { get { return 1; } }
+		public int SampleBits { get { return 16; } }
+		public int SampleRate { get; set; }
+
+		public float LengthInSeconds {
+			get
+			{
+				var samples = outputSize;
+				if (flags.HasFlag(SoundFlags.Stereo)) samples /= 2;
+				if (flags.HasFlag(SoundFlags._16Bit)) samples /= 2;
+				return (float)samples / SampleRate;
+			}
+		}
+
+		int dataSize;
+		int outputSize;
+		SoundFlags flags;
+		int format;
+
+		Stream stream;
+
+		[Flags]
+		enum SoundFlags
+		{
+			Stereo = 0x1,
+			_16Bit = 0x2,
+		}
+
+		enum SoundFormat
+		{
+			WestwoodCompressed = 1,
+			ImaAdpcm = 99,
+		}
+
+		struct Chunk
+		{
+			public int CompressedSize;
+			public int OutputSize;
+
+			public static Chunk Read(Stream s)
+			{
+				Chunk c;
+				c.CompressedSize = s.ReadUInt16();
+				c.OutputSize = s.ReadUInt16();
+
+				if (s.ReadUInt32() != 0xdeaf)
+					throw new InvalidDataException("Chunk header is bogus");
+				return c;
+			}
+		}
+
 		static readonly int[] IndexAdjust = { -1, -1, -1, -1, 2, 4, 6, 8 };
 		static readonly int[] StepTable =
 		{
@@ -59,6 +99,12 @@ namespace OpenRA.FileFormats
 			7132, 7845, 8630, 9493, 10442, 11487, 12635, 13899, 15289,
 			16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
 		};
+
+		public AudFormat(Stream stream)
+		{
+			this.stream = stream;
+			ParseHeader();
+		}
 
 		static short DecodeSample(byte b, ref int index, ref int current)
 		{
@@ -105,113 +151,109 @@ namespace OpenRA.FileFormats
 			return output;
 		}
 
-		public float GetLength(Stream s)
+		void ParseHeader()
 		{
-			var sampleRate = s.ReadUInt16();
-			/*var dataSize = */ s.ReadInt32();
-			var outputSize = s.ReadInt32();
-			var flagsByte = s.ReadByte();
-
-			var flags = (SoundFlags)flagsByte;
-			var samples = outputSize;
-			if (0 != (flags & SoundFlags.Stereo)) samples /= 2;
-			if (0 != (flags & SoundFlags._16Bit)) samples /= 2;
-			return samples / sampleRate;
-		}
-
-		public bool CanParse(Stream stream)
-		{
-			var position = stream.Position;
-			/*var sampleRate =*/ stream.ReadUInt16();
-			/*var dataSize =*/ stream.ReadInt32();
-			/*var outputSize =*/ stream.ReadInt32();
-			var flags = stream.ReadByte();
-			var format = stream.ReadByte();
+			SampleRate = stream.ReadUInt16();
+			dataSize = stream.ReadInt32();
+			outputSize = stream.ReadInt32();
+			flags = (SoundFlags)stream.ReadByte();
+			format = stream.ReadByte();
 
 			if (!Enum.IsDefined(typeof(SoundFlags), flags))
-			{
-				stream.Position = position;
-				return false;
-			}
+				throw new InvalidDataException("Unsupported AUD flag \"" + flags.ToString("X") + "\"");
 
 			if (!Enum.IsDefined(typeof(SoundFormat), format))
-			{
-				stream.Position = position;
-				return false;
-			}
-
-			stream.Position = position;
-			return true;
+				throw new InvalidDataException("Unsupported AUD format \"" + format.ToString("X") + "\"");
 		}
 
-		public void LoadSound(Stream s, out byte[] rawData, out int sampleRate)
+		public Stream GetPCMInputStream()
 		{
-			sampleRate = s.ReadUInt16();
-			var dataSize = s.ReadInt32();
-			var outputSize = s.ReadInt32();
-			/*var readFlag =*/ s.ReadByte();
-			/*var readFormat =*/ s.ReadByte();
+			return new AudStream(this);
+		}
 
-			var output = new byte[outputSize];
-			var offset = 0;
-			var index = 0;
-			var currentSample = 0;
-
-			while (dataSize > 0)
+		class AudStream : Stream
+		{
+			AudFormat format;
+			byte[] buffer = new byte[4096];
+			int currentSample = 0;
+			int index = 0;
+			int samplesInChunk = 0;
+			int offset = 0;
+			int bytesLeft;
+			public AudStream(AudFormat format)
 			{
-				var chunk = Chunk.Read(s);
-				for (var n = 0; n < chunk.CompressedSize; n++)
+				this.format = format;
+				bytesLeft = format.dataSize;
+			}
+
+			public override bool CanRead { get { return bytesLeft > 0; } } 
+			public override bool CanSeek { get { return false; } }
+			public override bool CanWrite { get { return false; } }
+			public override long Length { get { return format.outputSize; } }
+
+			public override long Position
+			{
+				get { return offset; }
+				set { throw new NotImplementedException(); }
+			}
+
+			int FillBuffer(int count)
+			{
+				var samplesInBuffer = 0;
+				var samplesToBuffer = Math.Min(buffer.Length, count);
+				while (samplesToBuffer > 0 && bytesLeft > 0)
 				{
-					var b = s.ReadUInt8();
+					if (samplesInChunk <= 0)
+					{
+						var chunk = Chunk.Read(format.stream);
+						samplesInChunk = chunk.CompressedSize;
+						bytesLeft -= 8;
+					}
+
+					var b = format.stream.ReadUInt8();
+					samplesInChunk--;
+					bytesLeft--;
 
 					var t = DecodeSample(b, ref index, ref currentSample);
-					output[offset++] = (byte)t;
-					output[offset++] = (byte)(t >> 8);
+					buffer[samplesInBuffer++] = (byte)t;
+					buffer[samplesInBuffer++] = (byte)(t >> 8);
+					offset += 2;
+					samplesToBuffer -= 2;
 
-					if (offset < outputSize)
+					if (samplesToBuffer >= 2)
 					{
-						/* possible that only half of the final byte is used! */
 						t = DecodeSample((byte)(b >> 4), ref index, ref currentSample);
-						output[offset++] = (byte)t;
-						output[offset++] = (byte)(t >> 8);
+						buffer[samplesInBuffer++] = (byte)t;
+						buffer[samplesInBuffer++] = (byte)(t >> 8);
+						offset += 2;
+						samplesToBuffer -= 2;
 					}
 				}
-
-				dataSize -= 8 + chunk.CompressedSize;
+				return samplesInBuffer;
 			}
 
-			rawData = output;
-		}
-
-		public bool TryParseSound(Stream stream, string fileName, out byte[] rawData, out int channels, out int sampleBits,
-			out int sampleRate)
-		{
-			rawData = null;
-			channels = sampleBits = sampleRate = 0;
-
-			try
+			public override int Read(byte[] buffer, int offset, int count)
 			{
-				if (!CanParse(stream))
-					return false;
+				var bytesWritten = 0;
+				var samplesLeft = Math.Min(count, buffer.Length - offset);
+				while (samplesLeft > 0)
+				{
+					var len = FillBuffer(samplesLeft);
+					if (len == 0)
+						break;
+					Buffer.BlockCopy(this.buffer, 0, buffer, offset, len);
+					samplesLeft -= len;
+					offset += len;
+					bytesWritten += len;
+				}
 
-				LoadSound(stream, out rawData, out sampleRate);
+				return bytesWritten;
 			}
-			catch (Exception e)
-			{
-				// CanParse() will check if the stream is in a format that this parser supports.
-				// If not, it will simply return false so we know we can't use it. If it is, it will start
-				// parsing the data without any further failsafes, which means that it will crash on corrupted files
-				// (that end prematurely or otherwise don't conform to the specifications despite the headers being OK).
-				Log.Write("debug", "Failed to parse AUD file {0}. Error message:".F(fileName));
-				Log.Write("debug", e.ToString());
-				rawData = null;
-				return false;
-			}
 
-			channels = 1;
-			sampleBits = 16;
-
-			return true;
+			public override void Flush() { throw new NotImplementedException(); }
+			public override long Seek(long offset, SeekOrigin origin) { throw new NotImplementedException(); }
+			public override void SetLength(long value) { throw new NotImplementedException(); }
+			public override void Write(byte[] buffer, int offset, int count) { throw new NotImplementedException(); }
 		}
 	}
 }

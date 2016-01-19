@@ -21,6 +21,7 @@ namespace OpenRA
 		{
 			if (count < 0)
 				throw new ArgumentOutOfRangeException("count", "Non-negative number required.");
+			count = Math.Min(count, (int)(s.Length - s.Position));
 			var buffer = new byte[count];
 			s.ReadBytes(buffer, 0, count);
 			return buffer;

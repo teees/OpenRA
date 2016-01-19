@@ -18,6 +18,7 @@ using OpenRA.FileSystem;
 using OpenRA.GameRules;
 using OpenRA.Primitives;
 using OpenRA.Traits;
+using System.IO;
 
 namespace OpenRA.Platforms.Default
 {
@@ -41,7 +42,7 @@ namespace OpenRA.Platforms.Default
 			public int FrameStarted;
 			public WPos Pos;
 			public bool IsRelative;
-			public ISoundSource Sound;
+			public OpenAlSound Sound;
 		}
 
 		const int MaxInstancesPerFrame = 3;
@@ -153,7 +154,10 @@ namespace OpenRA.Platforms.Default
 			}
 
 			foreach (var i in freeSources)
+			{
 				sourcePool[i].IsActive = false;
+				sourcePool[i].Sound.UnbindBuffers();
+			}
 
 			sourcePool[freeSources[0]].IsActive = true;
 
@@ -164,6 +168,11 @@ namespace OpenRA.Platforms.Default
 		public ISoundSource AddSoundSourceFromMemory(byte[] data, int channels, int sampleBits, int sampleRate)
 		{
 			return new OpenAlSoundSource(data, channels, sampleBits, sampleRate);
+		}
+
+		public ISoundSource AddSoundSourceFromStream(Stream stream, int channels, int sampleBits, int sampleRate)
+		{
+			return new OpenAlStreamingSoundSource(stream, channels, sampleBits, sampleRate);
 		}
 
 		public ISound Play2D(ISoundSource sound, bool loop, bool relative, WPos pos, float volume, bool attenuateVolume)
@@ -189,7 +198,7 @@ namespace OpenRA.Platforms.Default
 						continue;
 
 					++activeCount;
-					if (s.Sound != sound)
+					if (s.Sound.SoundSource != sound)
 						continue;
 					if (currFrame - s.FrameStarted >= 5)
 						continue;
@@ -218,9 +227,9 @@ namespace OpenRA.Platforms.Default
 			var slot = sourcePool[source];
 			slot.Pos = pos;
 			slot.FrameStarted = currFrame;
-			slot.Sound = sound;
 			slot.IsRelative = relative;
-			return new OpenAlSound(source, ((OpenAlSoundSource)sound).Buffer, loop, relative, pos, volume * atten);
+			slot.Sound = new OpenAlSound(source, (OpenAlSoundSource)sound, loop, relative, pos, volume * atten);
+			return slot.Sound;
 		}
 
 		public float Volume
@@ -289,7 +298,7 @@ namespace OpenRA.Platforms.Default
 			{
 				int state;
 				AL10.alGetSourcei(key, AL10.AL_SOURCE_STATE, out state);
-				if (state == AL10.AL_PLAYING || state == AL10.AL_PAUSED)
+				if (state != AL10.AL_PLAYING || state == AL10.AL_PAUSED)
 					AL10.alSourceStop(key);
 			}
 		}
@@ -327,9 +336,21 @@ namespace OpenRA.Platforms.Default
 
 	class OpenAlSoundSource : ISoundSource
 	{
-		public readonly uint Buffer;
+		protected List<uint> buffers = new List<uint>();
 
-		static int MakeALFormat(int channels, int bits)
+		public virtual void QueueBuffer() { }
+
+		public virtual void BindBuffers(uint source)
+		{
+			AL10.alSourcei(source, AL10.AL_BUFFER, (int)buffers[0]);
+		}
+
+		public virtual void UnbindBuffers(uint source)
+		{
+			AL10.alSourcei(source, AL10.AL_BUFFER, 0);
+		}
+
+		public static int MakeALFormat(int channels, int bits)
 		{
 			if (channels == 1)
 				return bits == 16 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_MONO8;
@@ -337,33 +358,103 @@ namespace OpenRA.Platforms.Default
 				return bits == 16 ? AL10.AL_FORMAT_STEREO16 : AL10.AL_FORMAT_STEREO8;
 		}
 
+		protected OpenAlSoundSource() { }
+
 		public OpenAlSoundSource(byte[] data, int channels, int sampleBits, int sampleRate)
 		{
-			AL10.alGenBuffers(new IntPtr(1), out Buffer);
-			AL10.alBufferData(Buffer, MakeALFormat(channels, sampleBits), data, new IntPtr(data.Length), new IntPtr(sampleRate));
+			uint buffer;
+			AL10.alGenBuffers(new IntPtr(1), out buffer);
+			AL10.alBufferData(buffer, MakeALFormat(channels, sampleBits), data, new IntPtr(data.Length), new IntPtr(sampleRate));
+			buffers.Add(buffer);
+		}
+	}
+
+	class OpenAlStreamingSoundSource : OpenAlSoundSource
+	{
+		readonly Stream stream;
+		readonly int channels;
+		readonly int sampleBits;
+		readonly int sampleRate;
+		readonly List<uint> sources = new List<uint>();
+
+		public override void QueueBuffer()
+		{
+			if (!stream.CanRead || stream.Position >= stream.Length || sources.Count == 0)
+				return;
+
+			var alBuffer = readBuffer();
+			buffers.Add(alBuffer);
+
+			for (var i = sources.Count - 1; i >= 0; i--)
+				AL10.alSourceQueueBuffers(sources[i], new IntPtr(1), new uint[] { alBuffer });
+		}
+
+		public override void BindBuffers(uint source)
+		{
+			sources.Add(source);
+			AL10.alSourceQueueBuffers(source, new IntPtr(buffers.Count), buffers.ToArray());
+		}
+
+		public override void UnbindBuffers(uint source)
+		{
+			// Unqueue all buffers on source before (re)usage
+			sources.Remove(source);
+			base.UnbindBuffers(source);
+		}
+
+		uint readBuffer()
+		{
+			var bufferSize = Math.Min(262144, stream.Length - stream.Position);
+			var buffer = new byte[bufferSize];
+			var bytesRead = stream.Read(buffer, 0, buffer.Length);
+			if (bytesRead == 0)
+				throw new EndOfStreamException();
+
+			uint alBuffer;
+			AL10.alGenBuffers(new IntPtr(1), out alBuffer);
+			AL10.alBufferData(alBuffer, MakeALFormat(channels, sampleBits), buffer, new IntPtr(bytesRead), new IntPtr(sampleRate));
+			return alBuffer;
+		}
+
+		public OpenAlStreamingSoundSource(Stream stream, int channels, int sampleBits, int sampleRate) : base()
+		{
+			this.stream = stream;
+			this.channels = channels;
+			this.sampleBits = sampleBits;
+			this.sampleRate = sampleRate;
+
+			buffers.Add(readBuffer());
 		}
 	}
 
 	class OpenAlSound : ISound
 	{
 		public readonly uint Source = uint.MaxValue;
+		public readonly OpenAlSoundSource SoundSource;
 		float volume = 1f;
 
-		public OpenAlSound(uint source, uint buffer, bool looping, bool relative, WPos pos, float volume)
+		public OpenAlSound(uint source, OpenAlSoundSource soundSource, bool looping, bool relative, WPos pos, float volume)
 		{
+			SoundSource = soundSource;
 			Source = source;
 			Volume = volume;
 
 			AL10.alSourcef(source, AL10.AL_PITCH, 1f);
 			AL10.alSource3f(source, AL10.AL_POSITION, pos.X, pos.Y, pos.Z);
 			AL10.alSource3f(source, AL10.AL_VELOCITY, 0f, 0f, 0f);
-			AL10.alSourcei(source, AL10.AL_BUFFER, (int)buffer);
+
+			soundSource.BindBuffers(source);
 			AL10.alSourcei(source, AL10.AL_LOOPING, looping ? 1 : 0);
 			AL10.alSourcei(source, AL10.AL_SOURCE_RELATIVE, relative ? 1 : 0);
 
 			AL10.alSourcef(source, AL10.AL_REFERENCE_DISTANCE, 6826);
 			AL10.alSourcef(source, AL10.AL_MAX_DISTANCE, 136533);
 			AL10.alSourcePlay(source);
+		}
+
+		public void UnbindBuffers()
+		{
+			SoundSource.UnbindBuffers(Source);
 		}
 
 		public float Volume

@@ -9,6 +9,7 @@
 #endregion
 
 using System;
+using System.IO;
 
 namespace OpenRA.Platforms.Null
 {
@@ -25,6 +26,11 @@ namespace OpenRA.Platforms.Null
 		}
 
 		public ISoundSource AddSoundSourceFromMemory(byte[] data, int channels, int sampleBits, int sampleRate)
+		{
+			return new NullSoundSource();
+		}
+
+		public ISoundSource AddSoundSourceFromStream(Stream inputStream, int channels, int sampleBits, int sampleRate)
 		{
 			return new NullSoundSource();
 		}
@@ -46,7 +52,10 @@ namespace OpenRA.Platforms.Null
 		public void Dispose() { }
 	}
 
-	class NullSoundSource : ISoundSource { }
+	class NullSoundSource : ISoundSource
+	{
+		public void QueueBuffer() { }
+	}
 
 	class NullSound : ISound
 	{

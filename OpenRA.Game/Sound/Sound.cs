@@ -19,9 +19,16 @@ namespace OpenRA
 {
 	public interface ISoundLoader
 	{
-		bool CanParse(Stream stream);
-		bool TryParseSound(Stream stream, string fileName, out byte[] rawData, out int channels, out int sampleBits, out int sampleRate);
-		float GetLength(Stream stream);
+		bool TryParseSound(Stream stream, out ISoundFormat sound);
+	}
+
+	public interface ISoundFormat
+	{
+		int Channels { get; }
+		int SampleBits { get; }
+		int SampleRate { get; }
+		float LengthInSeconds { get; }
+		Stream GetPCMInputStream();
 	}
 
 	public sealed class Sound : IDisposable
@@ -58,21 +65,16 @@ namespace OpenRA
 				return null;
 			}
 
-			using (var stream = Game.ModData.ModFiles.Open(filename))
+			var stream = Game.ModData.ModFiles.Open(filename);
+			ISoundFormat soundFormat;
+			foreach (var loader in Game.ModData.SoundLoaders)
 			{
-				byte[] rawData;
-				int channels;
-				int sampleBits;
-				int sampleRate;
-				foreach (var loader in Game.ModData.SoundLoaders)
-				{
-					stream.Position = 0;
-					if (loader.TryParseSound(stream, filename, out rawData, out channels, out sampleBits, out sampleRate))
-						return soundEngine.AddSoundSourceFromMemory(rawData, channels, sampleBits, sampleRate);
-				}
-
-				throw new InvalidDataException(filename + " is not a valid sound file!");
+				stream.Position = 0;
+				if (loader.TryParseSound(stream, out soundFormat))
+					return soundEngine.AddSoundSourceFromStream(soundFormat.GetPCMInputStream(), soundFormat.Channels, soundFormat.SampleBits, soundFormat.SampleRate);
 			}
+
+			throw new InvalidDataException(filename + " is not a valid sound file!");
 		}
 
 		public void Initialize()
@@ -166,6 +168,12 @@ namespace OpenRA
 			{
 				StopMusic();
 				onMusicComplete();
+			}
+
+			foreach (var pair in sounds)
+			{
+				if (pair.Value != null)
+					pair.Value.QueueBuffer();
 			}
 		}
 

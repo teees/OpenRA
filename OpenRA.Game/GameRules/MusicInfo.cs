@@ -47,10 +47,11 @@ namespace OpenRA.GameRules
 				foreach (var loader in Game.ModData.SoundLoaders)
 				{
 					stream.Position = 0;
-					if (!loader.CanParse(stream))
+					ISoundFormat format;
+					if (!loader.TryParseSound(stream, out format))
 						continue;
 
-					Length = (int)loader.GetLength(stream);
+					Length = (int)format.LengthInSeconds;
 					return;
 				}
 

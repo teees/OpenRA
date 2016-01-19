@@ -9,12 +9,14 @@
 #endregion
 
 using System;
+using System.IO;
 
 namespace OpenRA
 {
 	public interface ISoundEngine : IDisposable
 	{
 		SoundDevice[] AvailableDevices();
+		ISoundSource AddSoundSourceFromStream(Stream inputStream, int channels, int sampleBits, int sampleRate);
 		ISoundSource AddSoundSourceFromMemory(byte[] data, int channels, int sampleBits, int sampleRate);
 		ISound Play2D(ISoundSource sound, bool loop, bool relative, WPos pos, float volume, bool attenuateVolume);
 		float Volume { get; set; }
@@ -44,7 +46,10 @@ namespace OpenRA
 		}
 	}
 
-	public interface ISoundSource { }
+	public interface ISoundSource
+	{
+		void QueueBuffer();
+	}
 
 	public interface ISound
 	{
