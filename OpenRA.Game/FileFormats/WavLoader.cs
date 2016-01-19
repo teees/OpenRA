@@ -15,6 +15,66 @@ namespace OpenRA.FileFormats
 {
 	public class WavLoader : ISoundLoader
 	{
+		public bool TryParseSound(Stream stream, out ISoundFormat sound)
+		{
+			try
+			{
+				sound = new WavFormat(stream);
+				return true;
+			}
+			catch
+			{
+				// Not a (supported) WAV
+			}
+
+			sound = null;
+			return false;
+		}
+	}
+
+	public class WavFormat : ISoundFormat
+	{
+		public int Channels { get { initialize(); return channels; } }
+		public int SampleBits { get { initialize(); return sampleBits; } }
+		public int SampleRate { get { initialize(); return sampleRate; } }
+		public float LengthInSeconds { get { return wavReader.GetLength(stream); } }
+
+		public byte[] GetRawData()
+		{
+			initialize();
+			return rawData;
+		}
+
+		int channels;
+		int sampleBits;
+		int sampleRate;
+		byte[] rawData;
+
+		readonly Stream stream;
+		readonly WavReader wavReader;
+
+		bool initialized = false;
+
+		void initialize()
+		{
+			if (initialized)
+				return;
+			initialized = true;
+			wavReader.TryParseSound(stream, "", out rawData, out channels, out sampleBits, out sampleRate);
+		}
+
+		public WavFormat(Stream stream)
+		{
+			this.stream = stream;
+			wavReader = new WavReader();
+
+			if (!wavReader.CanParse(stream))
+				throw new InvalidDataException();
+		}
+	}
+
+	public class WavReader
+	{
 		public int FileSize;
 		public string Format;
 
@@ -44,7 +104,8 @@ namespace OpenRA.FileFormats
 				return false;
 			}
 
-			/*var fileSize =*/ stream.ReadInt32();
+			/*var fileSize =*/
+			stream.ReadInt32();
 			var format = stream.ReadASCII(4);
 			if (format != "WAVE")
 			{
@@ -157,7 +218,8 @@ namespace OpenRA.FileFormats
 				{
 					predictor[c] = s.ReadInt16();
 					index[c] = s.ReadUInt8();
-					/* unknown/reserved */ s.ReadUInt8();
+					/* unknown/reserved */
+					s.ReadUInt8();
 
 					// Output first sample from input
 					output[outOffset++] = (byte)predictor[c];
