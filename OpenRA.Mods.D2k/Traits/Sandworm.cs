@@ -55,7 +55,7 @@ namespace OpenRA.Mods.D2k.Traits
 			manager = self.World.WorldActor.Trait<WormManager>();
 		}
 
-		public override void DoAction(Actor self, CPos targetCell)
+		protected override void DoAction(Actor self, CPos targetCell)
 		{
 			IsMovingTowardTarget = false;
 

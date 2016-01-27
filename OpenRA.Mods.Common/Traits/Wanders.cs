@@ -30,7 +30,7 @@ namespace OpenRA.Mods.Common.Traits
 		public abstract object Create(ActorInitializer init);
 	}
 
-	public class Wanders : INotifyIdle, INotifyBecomingIdle
+	public abstract class Wanders : INotifyIdle, INotifyBecomingIdle
 	{
 		readonly Actor self;
 		readonly WandersInfo info;
@@ -81,9 +81,6 @@ namespace OpenRA.Mods.Common.Traits
 			return targetCell;
 		}
 
-		public virtual void DoAction(Actor self, CPos targetCell)
-		{
-			throw new NotImplementedException("Base class Wanders does not implement method DoAction!");
-		}
+		protected abstract void DoAction(Actor self, CPos targetCell);
 	}
 }
