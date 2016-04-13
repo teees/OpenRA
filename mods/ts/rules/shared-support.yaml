@@ -9,7 +9,6 @@ NAPULS:
 		Queue: Defense
 		BuildPaletteOrder: 90
 		Prerequisites: radar
-		BuildLimit: 1
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
