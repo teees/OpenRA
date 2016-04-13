@@ -9,6 +9,7 @@ NAPULS:
 		Queue: Defense
 		BuildPaletteOrder: 90
 		Prerequisites: radar
+		BuildLimit: 1
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
@@ -22,6 +23,7 @@ NAPULS:
 		Type: Heavy
 	RevealsShroud:
 		Range: 8c0
+	-AutoTarget:
 	Turreted:
 		TurnSpeed: 10
 		InitialFacing: 300
@@ -39,3 +41,7 @@ NAPULS:
 		FactionImages:
 			gdi: napuls.gdi
 			nod: napuls.nod
+	AttackOrderPower:
+		Cursor: emp
+		Icon: emp
+		ChargeTime: 135
