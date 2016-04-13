@@ -10,7 +10,10 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using OpenRA.Graphics;
+using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
 
@@ -35,7 +38,7 @@ namespace OpenRA.Mods.TS.Traits
 		public override void SelectTarget(Actor self, string order, SupportPowerManager manager)
 		{
 			Game.Sound.PlayToPlayer(manager.Self.Owner, Info.SelectTargetSound);
-			self.World.OrderGenerator = new SelectAttackPowerTarget(order, manager, info.Cursor, MouseButton.Left, attack);
+			self.World.OrderGenerator = new SelectAttackPowerTarget(self, order, manager, info.Cursor, MouseButton.Left, attack);
 		}
 
 		public override void Charged(Actor self, string key)
@@ -62,18 +65,20 @@ namespace OpenRA.Mods.TS.Traits
 	public class SelectAttackPowerTarget : IOrderGenerator
 	{
 		readonly SupportPowerManager manager;
+		readonly SupportPowerInstance instance;
 		readonly string order;
 		readonly string cursor;
 		readonly string cursorBlocked;
 		readonly MouseButton expectedButton;
 		readonly AttackBase attack;
 
-		public SelectAttackPowerTarget(string order, SupportPowerManager manager, string cursor, MouseButton button, AttackBase attack)
+		public SelectAttackPowerTarget(Actor self, string order, SupportPowerManager manager, string cursor, MouseButton button, AttackBase attack)
 		{
 			// Clear selection if using Left-Click Orders
 			if (Game.Settings.Game.UseClassicMouseStyle)
 				manager.Self.World.Selection.Clear();
 
+			instance = manager.GetPowersForActor(self).FirstOrDefault();
 			this.manager = manager;
 			this.order = order;
 			this.cursor = cursor;
@@ -86,7 +91,11 @@ namespace OpenRA.Mods.TS.Traits
 		{
 			world.CancelInputMode();
 			if (mi.Button == expectedButton && IsValidTarget(world, cell))
-				yield return new Order(order, manager.Self, false) { TargetLocation = cell, SuppressVisualFeedback = true };
+				yield return new Order(order, manager.Self, false) {
+					TargetActor = GetFiringActor(world, cell),
+					TargetLocation = cell,
+					SuppressVisualFeedback = true
+				};
 		}
 
 		public virtual void Tick(World world)
@@ -96,13 +105,44 @@ namespace OpenRA.Mods.TS.Traits
 				world.CancelInputMode();
 		}
 
+		public Actor GetFiringActor(World world, CPos cell)
+		{
+			var pos = world.Map.CenterOfCell(cell);
+			var range = attack.GetMaximumRange().LengthSquared;
+
+			return instance.Instances.Where(i => !i.Self.IsDisabled()).MinByOrDefault(a => (a.Self.CenterPosition - pos).HorizontalLengthSquared).Self;
+		}
+
 		bool IsValidTarget(World world, CPos cell)
 		{
-			return world.Map.Contains(cell) && attack.IsReachableTarget(Target.FromCell(world, cell), false);
+			var pos = world.Map.CenterOfCell(cell);
+			var range = attack.GetMaximumRange().LengthSquared;
+
+			return world.Map.Contains(cell) && instance.Instances.Any(a => !a.Self.IsDisabled() && (a.Self.CenterPosition - pos).HorizontalLengthSquared < range);
 		}
 
 		public IEnumerable<IRenderable> Render(WorldRenderer wr, World world) { yield break; }
-		public IEnumerable<IRenderable> RenderAfterWorld(WorldRenderer wr, World world) { yield break; }
+
+		public IEnumerable<IRenderable> RenderAfterWorld(WorldRenderer wr, World world)
+		{
+			foreach (var a in instance.Instances.Where(i => !i.Self.IsDisabled()))
+			{
+				yield return new RangeCircleRenderable(
+					a.Self.CenterPosition,
+					attack.GetMinimumRange(),
+					0,
+					Color.Red,
+					Color.FromArgb(96, Color.Black));
+
+				yield return new RangeCircleRenderable(
+					a.Self.CenterPosition,
+					attack.GetMaximumRange(),
+					0,
+					Color.Red,
+					Color.FromArgb(96, Color.Black));
+			}
+		}
+
 		public string GetCursor(World world, CPos cell, int2 worldPixel, MouseInput mi)
 		{
 			return IsValidTarget(world, cell) ? cursor : cursorBlocked;
