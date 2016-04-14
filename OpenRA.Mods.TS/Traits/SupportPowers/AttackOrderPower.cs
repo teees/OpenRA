@@ -72,6 +72,9 @@ namespace OpenRA.Mods.TS.Traits
 		readonly MouseButton expectedButton;
 		readonly AttackBase attack;
 
+		Actor firingActor;
+		Target? target;
+
 		public SelectAttackPowerTarget(Actor self, string order, SupportPowerManager manager, string cursor, MouseButton button, AttackBase attack)
 		{
 			// Clear selection if using Left-Click Orders
@@ -85,6 +88,8 @@ namespace OpenRA.Mods.TS.Traits
 			expectedButton = button;
 			this.attack = attack;
 			cursorBlocked = cursor + "-blocked";
+			firingActor = null;
+			target = null;
 		}
 
 		public IEnumerable<Order> Order(World world, CPos cell, int2 worldPixel, MouseInput mi)
@@ -103,6 +108,16 @@ namespace OpenRA.Mods.TS.Traits
 			// Cancel the OG if we can't use the power
 			if (!manager.Powers.ContainsKey(order))
 				world.CancelInputMode();
+
+			if (firingActor == null || target == null)
+				return;
+
+			var turreted = firingActor.TraitOrDefault<Turreted>();
+			if (turreted == null)
+				return;
+
+			turreted.FaceTarget(firingActor, (Target)target);
+
 		}
 
 		public Actor GetFiringActor(World world, CPos cell)
@@ -127,24 +142,28 @@ namespace OpenRA.Mods.TS.Traits
 		{
 			foreach (var a in instance.Instances.Where(i => !i.Self.IsDisabled()))
 			{
+				var color = (firingActor != null && a.Self.Equals(firingActor)) ? Color.Yellow : Color.Red;
 				yield return new RangeCircleRenderable(
 					a.Self.CenterPosition,
 					attack.GetMinimumRange(),
 					0,
-					Color.Red,
+					color,
 					Color.FromArgb(96, Color.Black));
 
 				yield return new RangeCircleRenderable(
 					a.Self.CenterPosition,
 					attack.GetMaximumRange(),
 					0,
-					Color.Red,
+					color,
 					Color.FromArgb(96, Color.Black));
 			}
 		}
 
 		public string GetCursor(World world, CPos cell, int2 worldPixel, MouseInput mi)
 		{
+			firingActor = GetFiringActor(world, cell);
+			target = Target.FromCell(world, cell);
+
 			return IsValidTarget(world, cell) ? cursor : cursorBlocked;
 		}
 	}
