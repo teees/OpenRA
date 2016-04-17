@@ -287,7 +287,10 @@ namespace OpenRA.Mods.Common.Traits
 			get { return Util.ApplyPercentageModifiers(Info.Speed, speedModifiers); }
 		}
 
-		public IEnumerable<Pair<CPos, SubCell>> OccupiedCells() { return NoCells; }
+		public IEnumerable<Pair<CPos, SubCell>> OccupiedCells()
+		{
+			return new[] { Pair.New(self.World.Map.CellContaining(self.CenterPosition), SubCell.FullCell) };
+		}
 
 		public WVec FlyStep(int facing)
 		{
@@ -618,6 +621,7 @@ namespace OpenRA.Mods.Common.Traits
 			if (um != null)
 				foreach (var u in Info.AirborneUpgrades)
 					um.GrantUpgrade(self, u, this);
+			self.World.ActorMap.RemoveInfluence(self, this);
 		}
 
 		void OnAirborneAltitudeLeft()
@@ -628,6 +632,7 @@ namespace OpenRA.Mods.Common.Traits
 			if (um != null)
 				foreach (var u in Info.AirborneUpgrades)
 					um.RevokeUpgrade(self, u, this);
+			self.World.ActorMap.AddInfluence(self, this);
 		}
 
 		#endregion
