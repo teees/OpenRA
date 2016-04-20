@@ -308,7 +308,7 @@ namespace OpenRA.Mods.Common.Traits
 			if (!self.World.Map.Contains(cell))
 				return false;
 
-			if (self.World.ActorMap.AnyActorsAt(cell))
+			if (self.World.ActorMap.AnyActorsAt(cell, SubCell.FullCell, (a) => a != self))
 				return false;
 
 			var type = self.World.Map.GetTerrainInfo(cell).Type;
