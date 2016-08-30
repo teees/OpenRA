@@ -215,12 +215,36 @@ TRACKS16:
 
 TUNTOP01:
 	Inherits: ^Tunnel
+	Exit@1:
+		SpawnOffset: -256,1024,0
+		ExitCell: 2,2
+	ExitsDebugOverlay:
+	RallyPoint:
+		Offset: 2,3
 
 TUNTOP02:
 	Inherits: ^Tunnel
+	Exit@1:
+		SpawnOffset: -256,1024,0
+		ExitCell: 2,2
+	ExitsDebugOverlay:
+	RallyPoint:
+		Offset: 2,3
 
 TUNTOP03:
 	Inherits: ^Tunnel
+	Exit@1:
+		SpawnOffset: -256,1024,0
+		ExitCell: 2,2
+	ExitsDebugOverlay:
+	RallyPoint:
+		Offset: 2,3
 
 TUNTOP04:
 	Inherits: ^Tunnel
+	Exit@1:
+		SpawnOffset: -256,1024,0
+		ExitCell: 2,2
+	ExitsDebugOverlay:
+	RallyPoint:
+		Offset: 2,3

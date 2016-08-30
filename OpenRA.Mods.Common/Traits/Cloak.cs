@@ -48,6 +48,8 @@ namespace OpenRA.Mods.Common.Traits
 		public readonly string CloakSound = null;
 		public readonly string UncloakSound = null;
 
+		public readonly bool HideForAllies = false;
+
 		[PaletteReference("IsPlayerPalette")] public readonly string Palette = "cloak";
 		public readonly bool IsPlayerPalette = false;
 
@@ -109,19 +111,24 @@ namespace OpenRA.Mods.Common.Traits
 
 		IEnumerable<IRenderable> IRenderModifier.ModifyRender(Actor self, WorldRenderer wr, IEnumerable<IRenderable> r)
 		{
-			if (remainingTime > 0 || IsTraitDisabled)
-				return r;
-
-			if (Cloaked && IsVisible(self, self.World.RenderPlayer))
+			if (Cloaked)
 			{
-				var palette = string.IsNullOrEmpty(Info.Palette) ? null : Info.IsPlayerPalette ? wr.Palette(Info.Palette + self.Owner.InternalName) : wr.Palette(Info.Palette);
-				if (palette == null)
-					return r;
+				if (IsVisible(self, self.World.RenderPlayer))
+				{
+					if (Info.HideForAllies)
+						r = r.Where(a => a.IsDecoration);
+
+					var palette = string.IsNullOrEmpty(Info.Palette) ? null : Info.IsPlayerPalette ? wr.Palette(Info.Palette + self.Owner.InternalName) : wr.Palette(Info.Palette);
+					if (palette == null)
+						return r;
+					else
+						return r.Select(a => a.IsDecoration ? a : a.WithPalette(palette));
+				}
 				else
-					return r.Select(a => a.IsDecoration ? a : a.WithPalette(palette));
+					return SpriteRenderable.None;
 			}
-			else
-				return SpriteRenderable.None;
+
+			return r;
 		}
 
 		void ITick.Tick(Actor self)

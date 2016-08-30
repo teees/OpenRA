@@ -88,6 +88,22 @@
 		UncloakSound: cloak5.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
 
+^Tunnelable:
+	TunnelPassenger:
+		TunnelUpgrades: tunneled
+		Voice: Move
+	Cloak@TUNNELED:
+		UpgradeTypes: tunneled
+		UpgradeMinEnabledLevel: 1
+		InitialDelay: 0
+		CloakDelay: 0
+		IsPlayerPalette: true
+		CloakSound:
+		UncloakSound:
+		UncloakOn: None
+		HideForAllies: True
+		CloakTypes: tunneledcloak
+
 ^BasicBuilding:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^SpriteActor
@@ -240,6 +256,7 @@
 	Inherits@2: ^ExistsInWorld
 	Inherits@3: ^SpriteActor
 	Inherits@4: ^Cloakable
+	Inherits@5: ^Tunnelable
 	Huntable:
 	DrawLineToTarget:
 	Health:
@@ -423,6 +440,7 @@
 	Inherits@3: ^EmpDisableMobile
 	Inherits@4: ^Cloakable
 	Inherits@5: ^DamagedByVeins
+	Inherits@6: ^Tunnelable
 	Huntable:
 	DrawLineToTarget:
 	Mobile:
@@ -831,7 +849,10 @@
 	AutoSelectionSize:
 
 ^Tunnel:
-	Inherits: ^TerrainOverlay
+	Inherits: ^BasicBuilding
+	RenderSprites:
+		Palette: terraindecoration
+	Tunnel:
 	CustomSelectionSize:
 		CustomBounds: 220,220
 
