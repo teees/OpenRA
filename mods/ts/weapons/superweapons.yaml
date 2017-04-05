@@ -99,12 +99,12 @@ EMPulseCannon:
 	ReloadDelay: 100
 	Range: 40c0
 	Report: plsecan2.aud
-	Projectile: Bullet
+	Projectile: VoxelMissile
 		Speed: 425
 		Blockable: false
 		Shadow: true
 		LaunchAngle: 62
-		Image: pulsball
+		Image: mislchem
 	Warhead@1Eff: CreateEffect
 		Explosions: pulse_explosion
 	Warhead@emp: GrantExternalCondition
@@ -114,6 +114,8 @@ EMPulseCannon:
 
 ClusterMissile:
 	ValidTargets: Ground, Water, Air
+	Projectile: VoxelMissile
+		Image: mislchem
 	Warhead@ImpactDamage0: SpreadDamage
 		Spread: 1c0
 		Damage: 150

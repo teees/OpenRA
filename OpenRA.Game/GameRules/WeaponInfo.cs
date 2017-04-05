@@ -32,6 +32,7 @@ namespace OpenRA.GameRules
 	}
 
 	public interface IProjectile : IEffect { }
+
 	public interface IProjectileInfo { IProjectile Create(ProjectileArgs args); }
 
 	public sealed class WeaponInfo

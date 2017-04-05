@@ -256,11 +256,16 @@ NAMISL:
 		IndicatorPalette: mouse
 		PowerupSpeech: EnablePower
 		PowerdownSpeech: DisablePower
+	-AutoTarget:
+	Armament:
+		Weapon: EMPulseCannon
+		LocalOffset: 150,0,1250
+		LocalYaw: 0,100
 	RequiresPower:
 	DisabledOverlay:
 	ProvidesPrerequisite@buildingname:
 	SupportPowerChargeBar:
-	NukePower:
+	AttackOrderPower:
 		Cursor: nuke
 		Icon: clustermissile
 		ChargeTime: 540

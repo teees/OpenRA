@@ -82,11 +82,12 @@ namespace OpenRA.Platforms.Default
 			else if (Platform.CurrentPlatform == PlatformType.Windows)
 			{
 				float ddpi, hdpi, vdpi;
+				/*
 				if (SDL.SDL_GetDisplayDPI(0, out ddpi, out hdpi, out vdpi) == 0)
 				{
 					WindowScale = ddpi / 96;
 					WindowSize = new Size((int)(SurfaceSize.Width / WindowScale), (int)(SurfaceSize.Height / WindowScale));
-				}
+				}*/
 			}
 			else
 			{
